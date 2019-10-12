@@ -26,9 +26,9 @@ CHECK_JOUEUR_ACTIF             check  JOUEUR
                                                                      		Actif IN ('1', '0')                                                             
                                                                      	                                                                                
 
-SYS_C00446187                  check  JOUEUR                         "NOJOUEUR" IS NOT NULL                                                          
-SYS_C00446188                  check  JOUEUR                         "COURRIEL" IS NOT NULL                                                          
-SYS_C00446189                  check  JOUEUR                         "SURNOM" IS NOT NULL                                                            
+SYS_C00451886                  check  JOUEUR                         "NOJOUEUR" IS NOT NULL                                                          
+SYS_C00451887                  check  JOUEUR                         "COURRIEL" IS NOT NULL                                                          
+SYS_C00451888                  check  JOUEUR                         "SURNOM" IS NOT NULL                                                            
 JOUEUR_PK                      PK     JOUEUR                                                                                                         
 
 6 lignes sélectionnées. 
@@ -55,8 +55,8 @@ WHERE	table_name=UPPER('ESRB')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
-SYS_C00446190                  check  ESRB                           "CODE" IS NOT NULL                                                              
-SYS_C00446191                  check  ESRB                           "DESCRIPTION" IS NOT NULL                                                       
+SYS_C00451889                  check  ESRB                           "CODE" IS NOT NULL                                                              
+SYS_C00451890                  check  ESRB                           "DESCRIPTION" IS NOT NULL                                                       
 ESRB_PK                        PK     ESRB                                                                                                           
 
 SQL> @check_contraintes.sql GENRE;
@@ -81,11 +81,11 @@ WHERE	table_name=UPPER('GENRE')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
-GENRE_FK                       FK     GENRE                                                                                                          
-SYS_C00446192                  check  GENRE                          "CODE" IS NOT NULL                                                              
-SYS_C00446193                  check  GENRE                          "DESCRIPTION" IS NOT NULL                                                       
-SYS_C00446194                  check  GENRE                          "CODEGENREPARENT" IS NOT NULL                                                   
+SYS_C00451891                  check  GENRE                          "CODE" IS NOT NULL                                                              
+SYS_C00451892                  check  GENRE                          "DESCRIPTION" IS NOT NULL                                                       
+SYS_C00451893                  check  GENRE                          "CODEGENREPARENT" IS NOT NULL                                                   
 GENRE_PK                       PK     GENRE                                                                                                          
+GENRE_FK                       FK     GENRE                                                                                                          
 
 SQL> @check_contraintes.sql SOUS_GENRE_JEU;
 SQL> SELECT 
@@ -109,11 +109,11 @@ WHERE	table_name=UPPER('SOUS_GENRE_JEU')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451894                  check  SOUS_GENRE_JEU                 "CODESOUSGENRE" IS NOT NULL                                                     
+SYS_C00451895                  check  SOUS_GENRE_JEU                 "IDJEU" IS NOT NULL                                                             
+SOUS_GENRE_JEU_PK              PK     SOUS_GENRE_JEU                                                                                                 
 SOUS_GENRE_JEU_SOUS_GENRE_FK   FK     SOUS_GENRE_JEU                                                                                                 
 SOUS_GENRE_JEU_ID_JEU_FK       FK     SOUS_GENRE_JEU                                                                                                 
-SYS_C00446195                  check  SOUS_GENRE_JEU                 "CODESOUSGENRE" IS NOT NULL                                                     
-SYS_C00446196                  check  SOUS_GENRE_JEU                 "IDJEU" IS NOT NULL                                                             
-SOUS_GENRE_JEU_PK              PK     SOUS_GENRE_JEU                                                                                                 
 
 SQL> @check_contraintes.sql JEU;
 SQL> SELECT 
@@ -137,12 +137,12 @@ WHERE	table_name=UPPER('JEU')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451896                  check  JEU                            "IDJEU" IS NOT NULL                                                             
+SYS_C00451897                  check  JEU                            "NOM" IS NOT NULL                                                               
+SYS_C00451898                  check  JEU                            "DESCRIPTION" IS NOT NULL                                                       
+JEU_PK                         PK     JEU                                                                                                            
 JEU_CODE_ESRB_FK               FK     JEU                                                                                                            
 JEU_CODE_GENRE_FK              FK     JEU                                                                                                            
-SYS_C00446197                  check  JEU                            "IDJEU" IS NOT NULL                                                             
-SYS_C00446198                  check  JEU                            "NOM" IS NOT NULL                                                               
-SYS_C00446199                  check  JEU                            "DESCRIPTION" IS NOT NULL                                                       
-JEU_PK                         PK     JEU                                                                                                            
 
 6 lignes sélectionnées. 
 
@@ -168,17 +168,17 @@ WHERE	table_name=UPPER('CONTENU')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
-CONTENU_FK                     FK     CONTENU                                                                                                        
 CHECK_CONTENU_TYPE             check  CONTENU                                                                                                        
                                                                      		TypeContenu IN ('J', 'D', 'O')                                                  
                                                                      	                                                                                
 
-SYS_C00446200                  check  CONTENU                        "IDCONTENU" IS NOT NULL                                                         
-SYS_C00446201                  check  CONTENU                        "NOM" IS NOT NULL                                                               
-SYS_C00446202                  check  CONTENU                        "DESCRIPTION" IS NOT NULL                                                       
-SYS_C00446203                  check  CONTENU                        "TYPECONTENU" IS NOT NULL                                                       
-SYS_C00446204                  check  CONTENU                        "IDJEU" IS NOT NULL                                                             
+SYS_C00451899                  check  CONTENU                        "IDCONTENU" IS NOT NULL                                                         
+SYS_C00451900                  check  CONTENU                        "NOM" IS NOT NULL                                                               
+SYS_C00451901                  check  CONTENU                        "DESCRIPTION" IS NOT NULL                                                       
+SYS_C00451902                  check  CONTENU                        "TYPECONTENU" IS NOT NULL                                                       
+SYS_C00451903                  check  CONTENU                        "IDJEU" IS NOT NULL                                                             
 CONTENU_PK                     PK     CONTENU                                                                                                        
+CONTENU_FK                     FK     CONTENU                                                                                                        
 
 8 lignes sélectionnées. 
 
@@ -204,11 +204,11 @@ WHERE	table_name=UPPER('CONTENU_POSSEDE')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+CONTENU_POSSEDE_NO_JOUEUR_FK   FK     CONTENU_POSSEDE                                                                                                
+SYS_C00451904                  check  CONTENU_POSSEDE                "IDCONTENU" IS NOT NULL                                                         
+SYS_C00451905                  check  CONTENU_POSSEDE                "NOJOUEUR" IS NOT NULL                                                          
 CONTENU_POSSEDE_PK             PK     CONTENU_POSSEDE                                                                                                
 CONTENU_POSSEDE_ID_CONTENU_FK  FK     CONTENU_POSSEDE                                                                                                
-CONTENU_POSSEDE_NO_JOUEUR_FK   FK     CONTENU_POSSEDE                                                                                                
-SYS_C00446205                  check  CONTENU_POSSEDE                "IDCONTENU" IS NOT NULL                                                         
-SYS_C00446206                  check  CONTENU_POSSEDE                "NOJOUEUR" IS NOT NULL                                                          
 
 SQL> @check_contraintes.sql SUCCES;
 SQL> SELECT 
@@ -232,12 +232,12 @@ WHERE	table_name=UPPER('SUCCES')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
-SUCCES_PK                      PK     SUCCES                                                                                                         
 SUCCES_FK                      FK     SUCCES                                                                                                         
 CHECK_SUCCES_VALEUR            check  SUCCES                         Valeur > 0                                                                      
-SYS_C00446207                  check  SUCCES                         "IDSUCCES" IS NOT NULL                                                          
-SYS_C00446208                  check  SUCCES                         "TITRE" IS NOT NULL                                                             
-SYS_C00446209                  check  SUCCES                         "IDCONTENU" IS NOT NULL                                                         
+SYS_C00451906                  check  SUCCES                         "IDSUCCES" IS NOT NULL                                                          
+SYS_C00451907                  check  SUCCES                         "TITRE" IS NOT NULL                                                             
+SYS_C00451908                  check  SUCCES                         "IDCONTENU" IS NOT NULL                                                         
+SUCCES_PK                      PK     SUCCES                                                                                                         
 
 6 lignes sélectionnées. 
 
@@ -263,11 +263,11 @@ WHERE	table_name=UPPER('SUCCES_CALCULE')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451909                  check  SUCCES_CALCULE                 "IDSUCCES" IS NOT NULL                                                          
+SYS_C00451910                  check  SUCCES_CALCULE                 "MAXIMUMREQUIS" IS NOT NULL                                                     
 SUCCES_CALCULE_PK              PK     SUCCES_CALCULE                                                                                                 
 SUCCES_CALCULE_FK              FK     SUCCES_CALCULE                                                                                                 
 CHECK_SUCCES_C_MAX_REQUIS      check  SUCCES_CALCULE                 MaximumRequis > 0                                                               
-SYS_C00446210                  check  SUCCES_CALCULE                 "IDSUCCES" IS NOT NULL                                                          
-SYS_C00446211                  check  SUCCES_CALCULE                 "MAXIMUMREQUIS" IS NOT NULL                                                     
 
 SQL> @check_contraintes.sql SUCCES_REALISE;
 SQL> SELECT 
@@ -291,12 +291,12 @@ WHERE	table_name=UPPER('SUCCES_REALISE')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451911                  check  SUCCES_REALISE                 "IDCONTENU" IS NOT NULL                                                         
+SYS_C00451912                  check  SUCCES_REALISE                 "NOJOUEUR" IS NOT NULL                                                          
+SYS_C00451913                  check  SUCCES_REALISE                 "IDSUCCES" IS NOT NULL                                                          
 SUCCES_REALISE_PK              PK     SUCCES_REALISE                                                                                                 
 SUCCES_REALISE_ID_SUCCES_FK    FK     SUCCES_REALISE                                                                                                 
 SUCCES_REALISE_CONTENU_FK      FK     SUCCES_REALISE                                                                                                 
-SYS_C00446212                  check  SUCCES_REALISE                 "IDCONTENU" IS NOT NULL                                                         
-SYS_C00446213                  check  SUCCES_REALISE                 "NOJOUEUR" IS NOT NULL                                                          
-SYS_C00446214                  check  SUCCES_REALISE                 "IDSUCCES" IS NOT NULL                                                          
 
 6 lignes sélectionnées. 
 
@@ -322,14 +322,14 @@ WHERE	table_name=UPPER('SUCCES_EN_COURS')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+CHECK_SUCCES_EN_COURS_COMPTEUR check  SUCCES_EN_COURS                Compteur > 0                                                                    
+SYS_C00451914                  check  SUCCES_EN_COURS                "IDCONTENU" IS NOT NULL                                                         
+SYS_C00451915                  check  SUCCES_EN_COURS                "NOJOUEUR" IS NOT NULL                                                          
+SYS_C00451916                  check  SUCCES_EN_COURS                "IDSUCCES" IS NOT NULL                                                          
+SYS_C00451917                  check  SUCCES_EN_COURS                "COMPTEUR" IS NOT NULL                                                          
 SUCCES_EN_COURS_PK             PK     SUCCES_EN_COURS                                                                                                
 SUCCES_EN_COURS_ID_SUCCES_FK   FK     SUCCES_EN_COURS                                                                                                
 SUCCES_EN_COURS_CONTENU_FK     FK     SUCCES_EN_COURS                                                                                                
-CHECK_SUCCES_EN_COURS_COMPTEUR check  SUCCES_EN_COURS                Compteur > 0                                                                    
-SYS_C00446215                  check  SUCCES_EN_COURS                "IDCONTENU" IS NOT NULL                                                         
-SYS_C00446216                  check  SUCCES_EN_COURS                "NOJOUEUR" IS NOT NULL                                                          
-SYS_C00446217                  check  SUCCES_EN_COURS                "IDSUCCES" IS NOT NULL                                                          
-SYS_C00446218                  check  SUCCES_EN_COURS                "COMPTEUR" IS NOT NULL                                                          
 
 8 lignes sélectionnées. 
 
@@ -355,8 +355,8 @@ WHERE	table_name=UPPER('FORFAIT')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451918                  check  FORFAIT                        "CODE" IS NOT NULL                                                              
 FORFAIT_PK                     PK     FORFAIT                                                                                                        
-SYS_C00446219                  check  FORFAIT                        "CODE" IS NOT NULL                                                              
 
 SQL> @check_contraintes.sql PERIODE;
 SQL> SELECT 
@@ -380,14 +380,14 @@ WHERE	table_name=UPPER('PERIODE')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+CHECK_PERIODE_PRIX             check  PERIODE                        Prix > 0                                                                        
+SYS_C00451919                  check  PERIODE                        "IDPERIODE" IS NOT NULL                                                         
+SYS_C00451920                  check  PERIODE                        "DATEDEBUT" IS NOT NULL                                                         
+SYS_C00451921                  check  PERIODE                        "DATEFIN" IS NOT NULL                                                           
+SYS_C00451922                  check  PERIODE                        "PRIX" IS NOT NULL                                                              
+SYS_C00451923                  check  PERIODE                        "CODEFORFAIT" IS NOT NULL                                                       
 PERIODE_PK                     PK     PERIODE                                                                                                        
 PERIODE_FK                     FK     PERIODE                                                                                                        
-CHECK_PERIODE_PRIX             check  PERIODE                        Prix > 0                                                                        
-SYS_C00446220                  check  PERIODE                        "IDPERIODE" IS NOT NULL                                                         
-SYS_C00446221                  check  PERIODE                        "DATEDEBUT" IS NOT NULL                                                         
-SYS_C00446222                  check  PERIODE                        "DATEFIN" IS NOT NULL                                                           
-SYS_C00446223                  check  PERIODE                        "PRIX" IS NOT NULL                                                              
-SYS_C00446224                  check  PERIODE                        "CODEFORFAIT" IS NOT NULL                                                       
 
 8 lignes sélectionnées. 
 
@@ -413,12 +413,12 @@ WHERE	table_name=UPPER('PERIODE_FORFAIT_JOUEUR')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451924                  check  PERIODE_FORFAIT_JOUEUR         "IDPERIODE" IS NOT NULL                                                         
+SYS_C00451925                  check  PERIODE_FORFAIT_JOUEUR         "NOJOUEUR" IS NOT NULL                                                          
+SYS_C00451926                  check  PERIODE_FORFAIT_JOUEUR         "DATEACHAT" IS NOT NULL                                                         
 PERIODE_FORFAIT_JOUEUR_PK      PK     PERIODE_FORFAIT_JOUEUR                                                                                         
 PERIODE_FORF_J_ID_PERIODE_FK   FK     PERIODE_FORFAIT_JOUEUR                                                                                         
 PERIODE_FORF_J_NO_JOUEUR_FK    FK     PERIODE_FORFAIT_JOUEUR                                                                                         
-SYS_C00446225                  check  PERIODE_FORFAIT_JOUEUR         "IDPERIODE" IS NOT NULL                                                         
-SYS_C00446226                  check  PERIODE_FORFAIT_JOUEUR         "NOJOUEUR" IS NOT NULL                                                          
-SYS_C00446227                  check  PERIODE_FORFAIT_JOUEUR         "DATEACHAT" IS NOT NULL                                                         
 
 6 lignes sélectionnées. 
 
@@ -444,15 +444,15 @@ WHERE	table_name=UPPER('RESEAU')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451927                  check  RESEAU                         "CODE" IS NOT NULL                                                              
+SYS_C00451928                  check  RESEAU                         "NOM" IS NOT NULL                                                               
+SYS_C00451929                  check  RESEAU                         "DESCRIPTION" IS NOT NULL                                                       
+SYS_C00451930                  check  RESEAU                         "ACTIF" IS NOT NULL                                                             
 RESEAU_PK                      PK     RESEAU                                                                                                         
 CHECK_RESEAU_ACTIF             check  RESEAU                                                                                                         
                                                                      		Actif IN ('1', '0')                                                             
                                                                      	                                                                                
 
-SYS_C00446228                  check  RESEAU                         "CODE" IS NOT NULL                                                              
-SYS_C00446229                  check  RESEAU                         "NOM" IS NOT NULL                                                               
-SYS_C00446230                  check  RESEAU                         "DESCRIPTION" IS NOT NULL                                                       
-SYS_C00446231                  check  RESEAU                         "ACTIF" IS NOT NULL                                                             
 
 6 lignes sélectionnées. 
 
@@ -478,11 +478,11 @@ WHERE	table_name=UPPER('ABONNEMENT_RESEAU')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451931                  check  ABONNEMENT_RESEAU              "CODERESEAU" IS NOT NULL                                                        
+SYS_C00451932                  check  ABONNEMENT_RESEAU              "NOJOUEUR" IS NOT NULL                                                          
 ABONNEMENT_RESEAU_PK           PK     ABONNEMENT_RESEAU                                                                                              
 ABONNEMENT_CODE_RESEAU_FK      FK     ABONNEMENT_RESEAU                                                                                              
 ABONNEMENT_NO_JOUEUR_FK        FK     ABONNEMENT_RESEAU                                                                                              
-SYS_C00446232                  check  ABONNEMENT_RESEAU              "CODERESEAU" IS NOT NULL                                                        
-SYS_C00446233                  check  ABONNEMENT_RESEAU              "NOJOUEUR" IS NOT NULL                                                          
 
 SQL> @check_contraintes.sql SUIVI_RESEAU;
 SQL> SELECT 
@@ -506,22 +506,22 @@ WHERE	table_name=UPPER('SUIVI_RESEAU')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451933                  check  SUIVI_RESEAU                   "IDSUIVI" IS NOT NULL                                                           
+SYS_C00451934                  check  SUIVI_RESEAU                   "MOMENT" IS NOT NULL                                                            
+SYS_C00451935                  check  SUIVI_RESEAU                   "CODERESEAU" IS NOT NULL                                                        
+SYS_C00451936                  check  SUIVI_RESEAU                   "DATESUIVI" IS NOT NULL                                                         
+SYS_C00451937                  check  SUIVI_RESEAU                   "ACTION" IS NOT NULL                                                            
+SYS_C00451938                  check  SUIVI_RESEAU                   "NOJOUEUR" IS NOT NULL                                                          
 SUIVI_RESEAU_PK                PK     SUIVI_RESEAU                                                                                                   
 SUIVI_RESEAU_CODE_RESEAU_FK    FK     SUIVI_RESEAU                                                                                                   
 SUIVI_RESEAU_NO_JOUEUR_FK      FK     SUIVI_RESEAU                                                                                                   
 CHECK_SUIVI_RESEAU_ACTION      check  SUIVI_RESEAU                                                                                                   
                                                                      		Action IN ('CRE', 'SUP', 'ACT', 'DES', 'ABO', 'DSA')                            
-                                                                     	                                                                                
-
-SYS_C00446234                  check  SUIVI_RESEAU                   "IDSUIVI" IS NOT NULL                                                           
-SYS_C00446235                  check  SUIVI_RESEAU                   "MOMENT" IS NOT NULL                                                            
-SYS_C00446236                  check  SUIVI_RESEAU                   "CODERESEAU" IS NOT NULL                                                        
-SYS_C00446237                  check  SUIVI_RESEAU                   "DATESUIVI" IS NOT NULL                                                         
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
-SYS_C00446238                  check  SUIVI_RESEAU                   "ACTION" IS NOT NULL                                                            
-SYS_C00446239                  check  SUIVI_RESEAU                   "NOJOUEUR" IS NOT NULL                                                          
+                                                                     	                                                                                
+
 
 10 lignes sélectionnées. 
 
@@ -547,13 +547,13 @@ WHERE	table_name=UPPER('AMI')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451939                  check  AMI                            "NOJOUEURINVITANT" IS NOT NULL                                                  
+SYS_C00451940                  check  AMI                            "NOJOUEURINVITE" IS NOT NULL                                                    
+SYS_C00451941                  check  AMI                            "CODESTATUT" IS NOT NULL                                                        
 AMI_PK                         PK     AMI                                                                                                            
 AMI_CODE_STATUT_FK             FK     AMI                                                                                                            
 AMI_NO_JOUEUR_INVITANT_FK      FK     AMI                                                                                                            
 AMI_NO_JOUEUR_INVITE_FK        FK     AMI                                                                                                            
-SYS_C00446240                  check  AMI                            "NOJOUEURINVITANT" IS NOT NULL                                                  
-SYS_C00446241                  check  AMI                            "NOJOUEURINVITE" IS NOT NULL                                                    
-SYS_C00446242                  check  AMI                            "CODESTATUT" IS NOT NULL                                                        
 
 7 lignes sélectionnées. 
 
@@ -579,9 +579,9 @@ WHERE	table_name=UPPER('STATUT_AMITIE')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451942                  check  STATUT_AMITIE                  "CODESTATUT" IS NOT NULL                                                        
+SYS_C00451943                  check  STATUT_AMITIE                  "DESCRIPTION" IS NOT NULL                                                       
 STATUT_AMITIE_PK               PK     STATUT_AMITIE                                                                                                  
-SYS_C00446243                  check  STATUT_AMITIE                  "CODESTATUT" IS NOT NULL                                                        
-SYS_C00446244                  check  STATUT_AMITIE                  "DESCRIPTION" IS NOT NULL                                                       
 
 SQL> @check_contraintes.sql SUIVI_AMITIE;
 SQL> SELECT 
@@ -605,16 +605,16 @@ WHERE	table_name=UPPER('SUIVI_AMITIE')
 
 NOM                            TYPE   TABLE_                         CONDITION_                                                                      
 ------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00451944                  check  SUIVI_AMITIE                   "IDSUIVI" IS NOT NULL                                                           
+SYS_C00451945                  check  SUIVI_AMITIE                   "MOMENT" IS NOT NULL                                                            
+SYS_C00451946                  check  SUIVI_AMITIE                   "NOJOUEURINVITANT" IS NOT NULL                                                  
+SYS_C00451947                  check  SUIVI_AMITIE                   "NOJOUEURINVITE" IS NOT NULL                                                    
+SYS_C00451948                  check  SUIVI_AMITIE                   "DATESUIVI" IS NOT NULL                                                         
+SYS_C00451949                  check  SUIVI_AMITIE                   "CODESTATUT" IS NOT NULL                                                        
 SUIVI_AMITIE_PK                PK     SUIVI_AMITIE                                                                                                   
 SUIVI_AMI_NO_J_INVITANT_FK     FK     SUIVI_AMITIE                                                                                                   
 SUIVI_AMI_NO_J_INVITE_FK       FK     SUIVI_AMITIE                                                                                                   
 SUIVI_AMITIE_CODE_STATUT_FK    FK     SUIVI_AMITIE                                                                                                   
-SYS_C00446245                  check  SUIVI_AMITIE                   "IDSUIVI" IS NOT NULL                                                           
-SYS_C00446246                  check  SUIVI_AMITIE                   "MOMENT" IS NOT NULL                                                            
-SYS_C00446247                  check  SUIVI_AMITIE                   "NOJOUEURINVITANT" IS NOT NULL                                                  
-SYS_C00446248                  check  SUIVI_AMITIE                   "NOJOUEURINVITE" IS NOT NULL                                                    
-SYS_C00446249                  check  SUIVI_AMITIE                   "DATESUIVI" IS NOT NULL                                                         
-SYS_C00446250                  check  SUIVI_AMITIE                   "CODESTATUT" IS NOT NULL                                                        
 
 10 lignes sélectionnées. 
 
