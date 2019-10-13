@@ -3,6 +3,7 @@ spool creation.log
 
 @creation_tables.sql
 @creation_contraintes.sql
+@creation_scripts.sql
 @creation_donnees.sql
 
 spool off
