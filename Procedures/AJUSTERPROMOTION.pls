@@ -26,9 +26,9 @@ BEGIN
     nb_max := 0;
     FOR code_reseau_actuel IN reseaux_actifs LOOP
         --On compte le nombre de joueurs abonnes a ce reseau
-        SELECT COUNT(*) FROM ABONNEMENT_RESEAU
-        WHERE CODERESEAU = code_reseau_actuel
-        INTO nb_joueurs;
+        SELECT COUNT(*) INTO nb_joueurs
+        FROM ABONNEMENT_RESEAU
+        WHERE CODERESEAU = code_reseau_actuel;
         IF nb_joueurs > nb_max THEN
             nb_max := nb_joueurs;
             code_reseau_plus_populaire := code_reseau_actuel;
@@ -54,9 +54,9 @@ BEGIN
         BEGIN
             --On compte le nombre de joueurs qui nt souscrit au forfait actuel
             --et qui font parti du reseau le plus populaire
-            SELECT COUNT(*) FROM ABONNEMENT_RESEAU
-            WHERE NOJOUEUR IN joueurs_forfait_actuel AND CODERESEAU = code_reseau_plus_populaire
-            INTO nb_joueurs;
+            SELECT COUNT(*) INTO nb_joueurs
+            FROM ABONNEMENT_RESEAU
+            WHERE (NOJOUEUR IN joueurs_forfait_actuel) AND (CODERESEAU = code_reseau_plus_populaire);
         END;
         IF nb_joueurs > nb_max THEN
             nb_max := nb_joueurs;
@@ -75,7 +75,7 @@ BEGIN
         SELECT PRIX FROM PERIODE
         WHERE CODEFORFAIT = code_forfait_plus_populaire;
     BEGIN
-        SELECT MAX(prix_forfait_actuel) INTO prix_forfait_plus_populaire;
+        SELECT MAX(prix_forfait_actuel) INTO prix_forfait_plus_populaire FROM DUAL;
     END;
     --Fin de la recherche du prix du forfait le plus populaire
     FETCH forfaits INTO code_forfait_actuel;
@@ -89,7 +89,7 @@ BEGIN
             SELECT PRIX FROM PERIODE
             WHERE CODEFORFAIT = code_forfait_actuel;
         BEGIN
-            SELECT MAX(prix_forfait_actuel) INTO prix_actuel;
+            SELECT MAX(prix_forfait_actuel) INTO prix_actuel FROM DUAL;
         END;
         --Fin de la recherche du prix du forfait actuel
         IF prix_actuel > prix_forfait_plus_actif THEN

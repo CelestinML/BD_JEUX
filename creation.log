@@ -1,0 +1,1493 @@
+SQL> 
+SQL> @creation_tables.sql
+SQL> REM CREATION DES TABLES
+SQL> 
+SQL> CREATE TABLE JOUEUR(
+  2  	NoJoueur						INTEGER			NOT NULL,
+  3  	Courriel						VARCHAR2(256)	NOT NULL,
+  4  	Surnom							VARCHAR2(50)	NOT NULL,
+  5  	Miniature						BLOB,
+  6  	Nom								VARCHAR2(100),
+  7  	Prenom							VARCHAR2(100),
+  8  	Actif							CHAR(1)
+  9  );
+
+Table JOUEUR créé(e).
+
+SQL> 
+SQL> CREATE TABLE ESRB(
+  2  	Code							CHAR(1)			NOT NULL,
+  3  	Description						VARCHAR2(50)	NOT NULL
+  4  );
+
+Table ESRB créé(e).
+
+SQL> 
+SQL> CREATE TABLE GENRE(
+  2  	Code							CHAR(3)			NOT NULL,
+  3  	Description						VARCHAR2(50)	NOT NULL,
+  4  	CodeGenreParent					CHAR(3)			NOT NULL
+  5  );
+
+Table GENRE créé(e).
+
+SQL> 
+SQL> CREATE TABLE SOUS_GENRE_JEU(
+  2  	CodeSousGenre					CHAR(3)			NOT NULL,
+  3  	IdJeu							INTEGER			NOT NULL
+  4  );
+
+Table SOUS_GENRE_JEU créé(e).
+
+SQL> 
+SQL> CREATE TABLE JEU(
+  2  	IdJeu							INTEGER			NOT NULL,
+  3  	Nom								VARCHAR2(100)	NOT NULL,
+  4  	Description						VARCHAR2(256)	NOT NULL,
+  5  	CodeESRB						CHAR(1),
+  6  	CodeGenre						CHAR(3)
+  7  );
+
+Table JEU créé(e).
+
+SQL> 
+SQL> CREATE TABLE CONTENU(
+  2  	IdContenu						INTEGER			NOT NULL,
+  3  	Nom								VARCHAR2(100)	NOT NULL,
+  4  	Description						VARCHAR2(256)	NOT NULL,
+  5  	DateSortie						DATE,
+  6  	TypeContenu						VARCHAR2(1)		NOT NULL,
+  7  	IdJeu							INTEGER			NOT NULL	
+  8  );
+
+Table CONTENU créé(e).
+
+SQL> 
+SQL> CREATE TABLE CONTENU_POSSEDE(
+  2  	IdContenu						INTEGER			NOT NULL,
+  3  	NoJoueur						INTEGER			NOT NULL
+  4  );
+
+Table CONTENU_POSSEDE créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUCCES(
+  2  	IdSucces						INTEGER			NOT NULL,
+  3  	Titre							VARCHAR2(50)	NOT NULL,
+  4  	Description						VARCHAR2(256),
+  5  	Image							BLOB,
+  6  	Valeur							NUMBER(3,0),
+  7  	IdContenu						INTEGER			NOT NULL	
+  8  );
+
+Table SUCCES créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUCCES_CALCULE(
+  2  	IdSucces						INTEGER			NOT NULL,
+  3  	MaximumRequis					NUMBER(3,0)		NOT NULL
+  4  );
+
+Table SUCCES_CALCULE créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUCCES_REALISE(
+  2  	IdContenu						INTEGER			NOT NULL,
+  3  	NoJoueur						INTEGER			NOT NULL,
+  4  	IdSucces						INTEGER			NOT NULL
+  5  );
+
+Table SUCCES_REALISE créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUCCES_EN_COURS(
+  2  	IdContenu						INTEGER			NOT NULL,
+  3  	NoJoueur						INTEGER			NOT NULL,
+  4  	IdSucces						INTEGER			NOT NULL,
+  5  	Compteur						NUMBER(3,0)		NOT NULL
+  6  );
+
+Table SUCCES_EN_COURS créé(e).
+
+SQL> 
+SQL> 
+SQL> CREATE TABLE FORFAIT(
+  2  	Code							CHAR(5)			NOT NULL,
+  3  	Nom								VARCHAR2(100),
+  4  	Description						VARCHAR2(1000)
+  5  );
+
+Table FORFAIT créé(e).
+
+SQL> 
+SQL> CREATE TABLE PERIODE(
+  2  	IdPeriode						INTEGER			NOT NULL,
+  3  	DateDebut						DATE			NOT NULL,
+  4  	DateFin							DATE			NOT NULL,
+  5  	Prix							NUMBER (6,2)	NOT NULL,
+  6  	CodeForfait						CHAR(5)			NOT NULL
+  7  );
+
+Table PERIODE créé(e).
+
+SQL> 
+SQL> CREATE TABLE PERIODE_FORFAIT_JOUEUR(
+  2  	IdPeriode						INTEGER			NOT NULL,
+  3  	NoJoueur						INTEGER			NOT NULL,
+  4  	DateAchat						DATE			NOT NULL
+  5  );
+
+Table PERIODE_FORFAIT_JOUEUR créé(e).
+
+SQL> 
+SQL> CREATE TABLE RESEAU(
+  2  	Code							CHAR(6)			NOT NULL,
+  3  	Nom								VARCHAR2(50)	NOT NULL,
+  4  	Description						VARCHAR2(100)	NOT NULL,
+  5  	Actif							VARCHAR2(1)		NOT NULL
+  6  );
+
+Table RESEAU créé(e).
+
+SQL> 
+SQL> CREATE TABLE ABONNEMENT_RESEAU(
+  2  	CodeReseau						CHAR(6)			NOT NULL,
+  3  	NoJoueur						INTEGER			NOT NULL
+  4  );
+
+Table ABONNEMENT_RESEAU créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUIVI_RESEAU(
+  2  	IdSuivi							INTEGER			NOT NULL,
+  3  	Moment							TIMESTAMP		NOT NULL,
+  4  	CodeReseau						CHAR(6)			NOT NULL,
+  5  	DateSuivi						DATE			NOT NULL,
+  6  	Action							CHAR(3)			NOT NULL,
+  7  	NoJoueur						INTEGER			NOT NULL	
+  8  );
+
+Table SUIVI_RESEAU créé(e).
+
+SQL> 
+SQL> CREATE TABLE AMI(
+  2  	NoJoueurInvitant				INTEGER			NOT NULL,	
+  3  	NoJoueurInvite					INTEGER			NOT NULL,	
+  4  	DateDebut						DATE,
+  5  	CodeStatut						CHAR(3)			NOT NULL	
+  6  );
+
+Table AMI créé(e).
+
+SQL> 
+SQL> CREATE TABLE STATUT_AMITIE(
+  2  	CodeStatut						CHAR(3)			NOT NULL,
+  3  	Description						VARCHAR2(25)	NOT NULL	
+  4  );
+
+Table STATUT_AMITIE créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUIVI_AMITIE(
+  2  	IdSuivi							INTEGER			NOT NULL,
+  3  	Moment							TIMESTAMP		NOT NULL,
+  4  	NoJoueurInvitant				INTEGER			NOT NULL,	
+  5  	NoJoueurInvite					INTEGER			NOT NULL,	
+  6  	DateSuivi						DATE			NOT NULL,
+  7  	CodeStatut						CHAR(3)			NOT NULL
+  8  );
+
+Table SUIVI_AMITIE créé(e).
+
+SQL> @creation_contraintes.sql
+SQL> REM CLÉS PRIMAIRES (PK)
+SQL> 
+SQL> ALTER TABLE JOUEUR
+  2  	ADD CONSTRAINT JOUEUR_PK
+  3  	PRIMARY KEY (NoJoueur)	
+  4  	USING INDEX;
+
+Table JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE ESRB
+  2  	ADD CONSTRAINT ESRB_PK
+  3  	PRIMARY KEY (Code)	
+  4  	USING INDEX;
+
+Table ESRB modifié(e).
+
+SQL> 
+SQL> ALTER TABLE GENRE
+  2  	ADD CONSTRAINT GENRE_PK
+  3  	PRIMARY KEY (Code)	
+  4  	USING INDEX;
+
+Table GENRE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SOUS_GENRE_JEU
+  2  	ADD CONSTRAINT SOUS_GENRE_JEU_PK
+  3  	PRIMARY KEY (CodeSousGenre, IdJeu)	
+  4  	USING INDEX;
+
+Table SOUS_GENRE_JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE JEU
+  2  	ADD CONSTRAINT JEU_PK
+  3  	PRIMARY KEY (IdJeu)	
+  4  	USING INDEX;
+
+Table JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE CONTENU
+  2  	ADD CONSTRAINT CONTENU_PK
+  3  	PRIMARY KEY (IdContenu)	
+  4  	USING INDEX;
+
+Table CONTENU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE CONTENU_POSSEDE
+  2  	ADD CONSTRAINT CONTENU_POSSEDE_PK
+  3  	PRIMARY KEY (IdContenu, NoJoueur)	
+  4  	USING INDEX;
+
+Table CONTENU_POSSEDE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES
+  2  	ADD CONSTRAINT SUCCES_PK
+  3  	PRIMARY KEY (IdSucces)	
+  4  	USING INDEX;
+
+Table SUCCES modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_CALCULE
+  2  	ADD CONSTRAINT SUCCES_CALCULE_PK
+  3  	PRIMARY KEY (IdSucces)	
+  4  	USING INDEX;
+
+Table SUCCES_CALCULE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_REALISE
+  2  	ADD CONSTRAINT SUCCES_REALISE_PK
+  3  	PRIMARY KEY (IdContenu, NoJoueur, IdSucces)	
+  4  	USING INDEX;
+
+Table SUCCES_REALISE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_EN_COURS
+  2  	ADD CONSTRAINT SUCCES_EN_COURS_PK
+  3  	PRIMARY KEY (IdContenu, NoJoueur, IdSucces)	
+  4  	USING INDEX;
+
+Table SUCCES_EN_COURS modifié(e).
+
+SQL> 
+SQL> ALTER TABLE FORFAIT
+  2  	ADD CONSTRAINT FORFAIT_PK
+  3  	PRIMARY KEY (Code)	
+  4  	USING INDEX;
+
+Table FORFAIT modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE
+  2  	ADD CONSTRAINT PERIODE_PK
+  3  	PRIMARY KEY (IdPeriode)	
+  4  	USING INDEX;
+
+Table PERIODE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE_FORFAIT_JOUEUR
+  2  	ADD CONSTRAINT PERIODE_FORFAIT_JOUEUR_PK
+  3  	PRIMARY KEY (IdPeriode, NoJoueur)
+  4  	USING INDEX;
+
+Table PERIODE_FORFAIT_JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE RESEAU
+  2  	ADD CONSTRAINT RESEAU_PK
+  3  	PRIMARY KEY (Code)	
+  4  	USING INDEX;
+
+Table RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE ABONNEMENT_RESEAU
+  2  	ADD CONSTRAINT ABONNEMENT_RESEAU_PK
+  3  	PRIMARY KEY (CodeReseau, NoJoueur)	
+  4  	USING INDEX;
+
+Table ABONNEMENT_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_RESEAU
+  2  	ADD CONSTRAINT SUIVI_RESEAU_PK
+  3  	PRIMARY KEY (IdSuivi)	
+  4  	USING INDEX;
+
+Table SUIVI_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE AMI
+  2  	ADD CONSTRAINT AMI_PK
+  3  	PRIMARY KEY (NoJoueurInvitant, NoJoueurInvite)	
+  4  	USING INDEX;
+
+Table AMI modifié(e).
+
+SQL> 
+SQL> ALTER TABLE STATUT_AMITIE
+  2  	ADD CONSTRAINT STATUT_AMITIE_PK
+  3  	PRIMARY KEY (CodeStatut)	
+  4  	USING INDEX;
+
+Table STATUT_AMITIE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_AMITIE
+  2  	ADD CONSTRAINT SUIVI_AMITIE_PK
+  3  	PRIMARY KEY (IdSuivi)	
+  4  	USING INDEX;
+
+Table SUIVI_AMITIE modifié(e).
+
+SQL> 
+SQL> 
+SQL> REM CLÉS ÉTRANGÈRES (FK)
+SQL> 
+SQL> ALTER TABLE GENRE
+  2  	ADD CONSTRAINT GENRE_FK
+  3  	FOREIGN KEY (CodeGenreParent)
+  4  	REFERENCES GENRE (Code);
+
+Table GENRE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SOUS_GENRE_JEU
+  2  	ADD CONSTRAINT SOUS_GENRE_JEU_SOUS_GENRE_FK
+  3  	FOREIGN KEY (CodeSousGenre)
+  4  	REFERENCES GENRE (Code);
+
+Table SOUS_GENRE_JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SOUS_GENRE_JEU
+  2  	ADD CONSTRAINT SOUS_GENRE_JEU_ID_JEU_FK
+  3  	FOREIGN KEY (IdJeu)
+  4  	REFERENCES JEU (IdJeu);
+
+Table SOUS_GENRE_JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE JEU
+  2  	ADD CONSTRAINT JEU_CODE_ESRB_FK
+  3  	FOREIGN KEY (CodeESRB)
+  4  	REFERENCES ESRB (Code);
+
+Table JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE JEU
+  2  	ADD CONSTRAINT JEU_CODE_GENRE_FK
+  3  	FOREIGN KEY (CodeGenre)
+  4  	REFERENCES GENRE (Code);
+
+Table JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE CONTENU
+  2  	ADD CONSTRAINT CONTENU_FK
+  3  	FOREIGN KEY (IdJeu)
+  4  	REFERENCES JEU (IdJeu);
+
+Table CONTENU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE CONTENU_POSSEDE
+  2  	ADD CONSTRAINT CONTENU_POSSEDE_ID_CONTENU_FK
+  3  	FOREIGN KEY (IdContenu)
+  4  	REFERENCES Contenu (IdContenu);
+
+Table CONTENU_POSSEDE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE CONTENU_POSSEDE
+  2  	ADD CONSTRAINT CONTENU_POSSEDE_NO_JOUEUR_FK
+  3  	FOREIGN KEY (NoJoueur)
+  4  	REFERENCES Joueur (NoJoueur);
+
+Table CONTENU_POSSEDE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES
+  2  	ADD CONSTRAINT SUCCES_FK
+  3  	FOREIGN KEY (IdContenu)
+  4  	REFERENCES CONTENU (IdContenu);
+
+Table SUCCES modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_CALCULE
+  2  	ADD CONSTRAINT SUCCES_CALCULE_FK
+  3  	FOREIGN KEY (IdSucces)
+  4  	REFERENCES SUCCES (IdSucces);
+
+Table SUCCES_CALCULE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_REALISE
+  2  	ADD CONSTRAINT SUCCES_REALISE_ID_SUCCES_FK
+  3  	FOREIGN KEY (IdSucces)
+  4  	REFERENCES SUCCES (IdSucces);
+
+Table SUCCES_REALISE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_REALISE
+  2  	ADD CONSTRAINT SUCCES_REALISE_CONTENU_FK
+  3  	FOREIGN KEY (IdContenu, NoJoueur)
+  4  	REFERENCES CONTENU_POSSEDE (IdContenu, NoJoueur);
+
+Table SUCCES_REALISE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_EN_COURS
+  2  	ADD CONSTRAINT SUCCES_EN_COURS_ID_SUCCES_FK
+  3  	FOREIGN KEY (IdSucces)
+  4  	REFERENCES SUCCES_CALCULE (IdSucces);
+
+Table SUCCES_EN_COURS modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_EN_COURS
+  2  	ADD CONSTRAINT SUCCES_EN_COURS_CONTENU_FK
+  3  	FOREIGN KEY (IdContenu, NoJoueur)
+  4  	REFERENCES CONTENU_POSSEDE (IdContenu, NoJoueur);
+
+Table SUCCES_EN_COURS modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE
+  2  	ADD CONSTRAINT PERIODE_FK
+  3  	FOREIGN KEY (CodeForfait)
+  4  	REFERENCES FORFAIT (Code);
+
+Table PERIODE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE_FORFAIT_JOUEUR
+  2  	ADD CONSTRAINT PERIODE_FORF_J_ID_PERIODE_FK
+  3  	FOREIGN KEY (IdPeriode)
+  4  	REFERENCES PERIODE (IdPeriode);
+
+Table PERIODE_FORFAIT_JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE_FORFAIT_JOUEUR
+  2  	ADD CONSTRAINT PERIODE_FORF_J_NO_JOUEUR_FK
+  3  	FOREIGN KEY (NoJoueur)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table PERIODE_FORFAIT_JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE ABONNEMENT_RESEAU
+  2  	ADD CONSTRAINT ABONNEMENT_CODE_RESEAU_FK
+  3  	FOREIGN KEY (CodeReseau)
+  4  	REFERENCES RESEAU (Code);
+
+Table ABONNEMENT_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE ABONNEMENT_RESEAU
+  2  	ADD CONSTRAINT ABONNEMENT_NO_JOUEUR_FK
+  3  	FOREIGN KEY (NoJoueur)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table ABONNEMENT_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_RESEAU
+  2  	ADD CONSTRAINT SUIVI_RESEAU_CODE_RESEAU_FK
+  3  	FOREIGN KEY (CodeReseau)
+  4  	REFERENCES RESEAU (Code);
+
+Table SUIVI_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_RESEAU
+  2  	ADD CONSTRAINT SUIVI_RESEAU_NO_JOUEUR_FK
+  3  	FOREIGN KEY (NoJoueur)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table SUIVI_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE AMI 
+  2  	ADD CONSTRAINT AMI_CODE_STATUT_FK
+  3  	FOREIGN KEY (CodeStatut)
+  4  	REFERENCES STATUT_AMITIE (CodeStatut);
+
+Table AMI modifié(e).
+
+SQL> 
+SQL> ALTER TABLE AMI
+  2  	ADD CONSTRAINT AMI_NO_JOUEUR_INVITANT_FK
+  3  	FOREIGN KEY (NoJoueurInvitant)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table AMI modifié(e).
+
+SQL> 
+SQL> ALTER TABLE AMI
+  2  	ADD CONSTRAINT AMI_NO_JOUEUR_INVITE_FK
+  3  	FOREIGN KEY (NoJoueurInvite)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table AMI modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_AMITIE
+  2  	ADD CONSTRAINT SUIVI_AMI_NO_J_INVITANT_FK
+  3  	FOREIGN KEY (NoJoueurInvitant)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table SUIVI_AMITIE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_AMITIE
+  2  	ADD CONSTRAINT SUIVI_AMI_NO_J_INVITE_FK
+  3  	FOREIGN KEY (NoJoueurInvite)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table SUIVI_AMITIE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_AMITIE
+  2  	ADD CONSTRAINT SUIVI_AMITIE_CODE_STATUT_FK
+  3  	FOREIGN KEY (CodeStatut)
+  4  	REFERENCES STATUT_AMITIE (CodeStatut);
+
+Table SUIVI_AMITIE modifié(e).
+
+SQL> 
+SQL> 
+SQL> REM Champs UNIQUE
+SQL> 
+SQL> ALTER TABLE JOUEUR
+  2  	ADD CONSTRAINT JOUEUR_UNIQUE UNIQUE (Courriel, Surnom);
+
+Table JOUEUR modifié(e).
+
+SQL> 
+SQL> 
+SQL> REM Listes des constraintes (CHECK CONSTRAINT)
+SQL> 
+SQL> ALTER TABLE CONTENU
+  2  	ADD CONSTRAINT CHECK_CONTENU_TYPE CHECK (
+  3  		TypeContenu IN ('J', 'D', 'O')
+  4  	);
+
+Table CONTENU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE JOUEUR
+  2  	ADD CONSTRAINT CHECK_JOUEUR_ACTIF CHECK (
+  3  		Actif IN ('1', '0')
+  4  	);
+
+Table JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE RESEAU
+  2  	ADD CONSTRAINT CHECK_RESEAU_ACTIF CHECK (
+  3  		Actif IN ('1', '0')
+  4  	);
+
+Table RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_RESEAU
+  2  	ADD CONSTRAINT CHECK_SUIVI_RESEAU_ACTION CHECK (
+  3  		Action IN ('CRE', 'SUP', 'ACT', 'DES', 'ABO', 'DSA')
+  4  	);
+
+Table SUIVI_RESEAU modifié(e).
+
+SQL> REM 'CREATION RESEAU', 'SUPPRESSION RESEAU', 
+SQL> REM 'ACTIVATION RESEAU', 'DESACTIVATION RESEAU', 
+SQL> REM 'ABONNEMENT JOUEUR', 'DESABONNEMENT JOUEUR'
+SQL> 
+SQL> ALTER TABLE SUCCES
+  2  	ADD CONSTRAINT CHECK_SUCCES_VALEUR CHECK (Valeur > 0);
+
+Table SUCCES modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_CALCULE
+  2  	ADD CONSTRAINT CHECK_SUCCES_C_MAX_REQUIS CHECK (MaximumRequis > 0);
+
+Table SUCCES_CALCULE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_EN_COURS
+  2  	ADD CONSTRAINT CHECK_SUCCES_EN_COURS_COMPTEUR CHECK (Compteur > 0);
+
+Table SUCCES_EN_COURS modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE
+  2  	ADD CONSTRAINT CHECK_PERIODE_PRIX CHECK (Prix >= 0);
+
+Table PERIODE modifié(e).
+
+SQL> 
+SQL> 
+SQL> REM Valeurs par défaut
+SQL> 
+SQL> ALTER TABLE SUCCES_EN_COURS
+  2    MODIFY (Compteur DEFAULT 0);
+
+Table SUCCES_EN_COURS modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE_FORFAIT_JOUEUR
+  2    MODIFY (DateAchat DEFAULT SysDate);
+
+Table PERIODE_FORFAIT_JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE JOUEUR
+  2    MODIFY (Actif DEFAULT '1');
+
+Table JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE RESEAU
+  2    MODIFY (Actif DEFAULT '1');
+
+Table RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE RESEAU
+  2    MODIFY (Actif DEFAULT '1');
+
+Table RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_RESEAU
+  2    MODIFY (Moment DEFAULT CURRENT_TIMESTAMP);
+
+Table SUIVI_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_AMITIE
+  2    MODIFY (Moment DEFAULT CURRENT_TIMESTAMP);
+
+Table SUIVI_AMITIE modifié(e).
+
+SQL> 
+SQL> 
+SQL> REM Séquences
+SQL> 
+SQL> CREATE SEQUENCE JEU_SEQ;
+
+Sequence JEU_SEQ créé(e).
+
+SQL> CREATE SEQUENCE CONTENU_SEQ;
+
+Sequence CONTENU_SEQ créé(e).
+
+SQL> CREATE SEQUENCE SUCCES_SEQ;
+
+Sequence SUCCES_SEQ créé(e).
+
+SQL> CREATE SEQUENCE PERIODE_SEQ;
+
+Sequence PERIODE_SEQ créé(e).
+
+SQL> CREATE SEQUENCE JOUEUR_SEQ;
+
+Sequence JOUEUR_SEQ créé(e).
+
+SQL> CREATE SEQUENCE SUIVI_AMITIE_SEQ;
+
+Sequence SUIVI_AMITIE_SEQ créé(e).
+
+SQL> CREATE SEQUENCE SUIVI_RESEAU_SEQ;
+
+Sequence SUIVI_RESEAU_SEQ créé(e).
+
+SQL> @creation_scripts.sql
+SQL> REM CREATION DES SCRIPTS
+SQL> 
+SQL> @scripts/creation_declencheurs.sql
+
+Erreur commençant à la ligne: 3 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_scripts.sql
+Dans la commande -
+@scripts/creation_declencheurs.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "scripts/creation_declencheurs.sql"
+SQL> @scripts/creation_procedures.sql
+
+Erreur commençant à la ligne: 4 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_scripts.sql
+Dans la commande -
+@scripts/creation_procedures.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "scripts/creation_procedures.sql"
+SQL> @scripts/creation_fonctions.sql
+
+Erreur commençant à la ligne: 5 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_scripts.sql
+Dans la commande -
+@scripts/creation_fonctions.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "scripts/creation_fonctions.sql"
+SQL> @scripts/creation_vues.sql
+
+Erreur commençant à la ligne: 6 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_scripts.sql
+Dans la commande -
+@scripts/creation_vues.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "scripts/creation_vues.sql"
+SQL> @creation_donnees.sql
+SQL> REM CREATION DES DONNÉES
+SQL> 
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom)
+  2  	VALUES ('bob@hotmail.com', 'BOB LE JOUEUR', NULL, 'Robert', 'Paquette');
+
+Erreur commençant à la ligne: 3 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom)
+	VALUES ('bob@hotmail.com', 'BOB LE JOUEUR', NULL, 'Robert', 'Paquette')
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."JOUEUR"."NOJOUEUR")
+
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+  2  	VALUES ('fred@outlook.com', 'Fred Y', NULL, NULL, NULL, 0);
+
+Erreur commençant à la ligne: 5 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+	VALUES ('fred@outlook.com', 'Fred Y', NULL, NULL, NULL, 0)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."JOUEUR"."NOJOUEUR")
+
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+  2  	VALUES ('roger@gmail.com', 'Roger la menace', NULL, 'Roger', 'Tremblay', 1);
+
+Erreur commençant à la ligne: 7 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+	VALUES ('roger@gmail.com', 'Roger la menace', NULL, 'Roger', 'Tremblay', 1)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."JOUEUR"."NOJOUEUR")
+
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+  2  	VALUES ('steve@hotmail.com', 'Steve le pirate', NULL, 'S', 'P', 1);
+
+Erreur commençant à la ligne: 9 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+	VALUES ('steve@hotmail.com', 'Steve le pirate', NULL, 'S', 'P', 1)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."JOUEUR"."NOJOUEUR")
+
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+  2  	VALUES ('sylvie@outlook.com', 'SILL VI', NULL, NULL, NULL, 1);
+
+Erreur commençant à la ligne: 11 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+	VALUES ('sylvie@outlook.com', 'SILL VI', NULL, NULL, NULL, 1)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."JOUEUR"."NOJOUEUR")
+
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+  2  	VALUES ('barbie15@gmail.com', 'Tank Girl', NULL, 'Tank', NULL, 0);
+
+Erreur commençant à la ligne: 13 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+	VALUES ('barbie15@gmail.com', 'Tank Girl', NULL, 'Tank', NULL, 0)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."JOUEUR"."NOJOUEUR")
+
+SQL> 
+SQL> INSERT INTO ESRB (Code, Description)
+  2  	VALUES ('E', 'Enfants et adultes');
+
+1 ligne inséré.
+
+SQL> INSERT INTO ESRB (Code, Description)
+  2  	VALUES ('T', 'Adolescents');
+
+1 ligne inséré.
+
+SQL> INSERT INTO ESRB (Code, Description)
+  2  	VALUES ('M', 'Jeunes adultes');
+
+1 ligne inséré.
+
+SQL> INSERT INTO ESRB (Code, Description)
+  2  	VALUES ('A', 'Adultes');
+
+1 ligne inséré.
+
+SQL> INSERT INTO ESRB (Code, Description)
+  2  	VALUES ('R', 'En attente de classement');
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('ACT', 'Action', 'ACT');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('HOR', 'Horreur', 'HOR');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('SPT', 'Sport', 'SPT');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('AVT', 'Aventure', 'ACT');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('HCK', 'Hack and Slash', 'ACT');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('SUR', 'Survie', 'HOR');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('COU', 'Course', 'SPT');
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO JEU (Nom, Description, CodeESRB, CodeGenre)
+  2  	VALUES ('TOMB RAIDER', 'Les aventures de Lara Croft', 'T', 'ACT');
+
+Erreur commençant à la ligne: 42 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO JEU (Nom, Description, CodeESRB, CodeGenre)
+	VALUES ('TOMB RAIDER', 'Les aventures de Lara Croft', 'T', 'ACT')
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."JEU"."IDJEU")
+
+SQL> INSERT INTO JEU (Nom, Description, CodeESRB, CodeGenre)
+  2  	VALUES ('Dying Light', 'Survivre dans un monde infesté de zombie. Bonne nuit!', 'M', 'HOR');
+
+Erreur commençant à la ligne: 44 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO JEU (Nom, Description, CodeESRB, CodeGenre)
+	VALUES ('Dying Light', 'Survivre dans un monde infesté de zombie. Bonne nuit!', 'M', 'HOR')
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."JEU"."IDJEU")
+
+SQL> 
+SQL> INSERT INTO SOUS_GENRE_JEU (CodeSousGenre, IdJeu)
+  2  	VALUES ('AVT', 1);
+
+Erreur commençant à la ligne: 47 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SOUS_GENRE_JEU (CodeSousGenre, IdJeu)
+	VALUES ('AVT', 1)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.SOUS_GENRE_JEU_ID_JEU_FK) - clé parent introuvable
+
+SQL> INSERT INTO SOUS_GENRE_JEU (CodeSousGenre, IdJeu)
+  2  	VALUES ('SUR', 2);
+
+Erreur commençant à la ligne: 49 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SOUS_GENRE_JEU (CodeSousGenre, IdJeu)
+	VALUES ('SUR', 2)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.SOUS_GENRE_JEU_ID_JEU_FK) - clé parent introuvable
+
+SQL> 
+SQL> INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+  2  	VALUES ('Les quêtes principales', 'Les aventures de Lara Croft en Amazonie', to_date('2018-02-03'), 'J', 1);
+
+Erreur commençant à la ligne: 52 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+	VALUES ('Les quêtes principales', 'Les aventures de Lara Croft en Amazonie', to_date('2018-02-03'), 'J', 1)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."CONTENU"."IDCONTENU")
+
+SQL> INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+  2  	VALUES ('La quête secondaire du dragon', 'Les aventures de Lara Croft en Chine', to_date('2018-06-23'), 'D', 1);
+
+Erreur commençant à la ligne: 54 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+	VALUES ('La quête secondaire du dragon', 'Les aventures de Lara Croft en Chine', to_date('2018-06-23'), 'D', 1)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."CONTENU"."IDCONTENU")
+
+SQL> INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+  2  	VALUES ('La quête secondaire de l''aigle', 'Les aventures de Lara Croft dans les montagnes', to_date('2018-11-11'),'D', 1);
+
+Erreur commençant à la ligne: 56 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+	VALUES ('La quête secondaire de l''aigle', 'Les aventures de Lara Croft dans les montagnes', to_date('2018-11-11'),'D', 1)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."CONTENU"."IDCONTENU")
+
+SQL> INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+  2  	VALUES ('Ensemble d''exploration', 'Équipements supplémentaires pour l''aventure', to_date('2018-12-01'), 'O', 1);
+
+Erreur commençant à la ligne: 58 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+	VALUES ('Ensemble d''exploration', 'Équipements supplémentaires pour l''aventure', to_date('2018-12-01'), 'O', 1)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."CONTENU"."IDCONTENU")
+
+SQL> INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+  2  	VALUES ('Chicago', 'La ville infestée de Chicago', to_date('2018-09-09'), 'J', 2);
+
+Erreur commençant à la ligne: 60 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+	VALUES ('Chicago', 'La ville infestée de Chicago', to_date('2018-09-09'), 'J', 2)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."CONTENU"."IDCONTENU")
+
+SQL> 
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (1, 1);
+
+Erreur commençant à la ligne: 63 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+	VALUES (1, 1)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.CONTENU_POSSEDE_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (2, 1);
+
+Erreur commençant à la ligne: 65 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+	VALUES (2, 1)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.CONTENU_POSSEDE_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (3, 1);
+
+Erreur commençant à la ligne: 67 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+	VALUES (3, 1)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.CONTENU_POSSEDE_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (4, 1);
+
+Erreur commençant à la ligne: 69 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+	VALUES (4, 1)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.CONTENU_POSSEDE_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (1, 2);
+
+Erreur commençant à la ligne: 71 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+	VALUES (1, 2)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.CONTENU_POSSEDE_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (5, 2);
+
+Erreur commençant à la ligne: 73 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+	VALUES (5, 2)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.CONTENU_POSSEDE_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> 
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Survivre', 'Vous avez réussi à traverser la foret amazonienne', 50, 1);
+
+Erreur commençant à la ligne: 76 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+	VALUES ('Survivre', 'Vous avez réussi à traverser la foret amazonienne', 50, 1)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."SUCCES"."IDSUCCES")
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Délivrance', 'Vous avez réussi à sauver Kevin', 10, 1);
+
+Erreur commençant à la ligne: 78 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+	VALUES ('Délivrance', 'Vous avez réussi à sauver Kevin', 10, 1)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."SUCCES"."IDSUCCES")
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Tenace', 'Rependre le combat après une raclée', 10, 1);
+
+Erreur commençant à la ligne: 80 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+	VALUES ('Tenace', 'Rependre le combat après une raclée', 10, 1)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."SUCCES"."IDSUCCES")
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Rusé', 'Résoudre l''énigme du dragon', 20, 2);
+
+Erreur commençant à la ligne: 82 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+	VALUES ('Rusé', 'Résoudre l''énigme du dragon', 20, 2)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."SUCCES"."IDSUCCES")
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Agile', 'Réussir un vol plané des hautes falaises', 20, 3);
+
+Erreur commençant à la ligne: 84 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+	VALUES ('Agile', 'Réussir un vol plané des hautes falaises', 20, 3)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."SUCCES"."IDSUCCES")
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Survivant', 'Survivre la première nuit dans la ville', 50, 5);
+
+Erreur commençant à la ligne: 86 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+	VALUES ('Survivant', 'Survivre la première nuit dans la ville', 50, 5)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."SUCCES"."IDSUCCES")
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Mission_1', 'Vaincre le gros méchant zombie à la fin de la mission', 10, 5);
+
+Erreur commençant à la ligne: 88 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+	VALUES ('Mission_1', 'Vaincre le gros méchant zombie à la fin de la mission', 10, 5)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."SUCCES"."IDSUCCES")
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Herboriste', 'Recuperer des plantes médécinales', 5, 5);
+
+Erreur commençant à la ligne: 90 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+	VALUES ('Herboriste', 'Recuperer des plantes médécinales', 5, 5)
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."SUCCES"."IDSUCCES")
+
+SQL> 
+SQL> INSERT INTO SUCCES_CALCULE (IdSucces, MaximumRequis)
+  2  	VALUES (8, 10);
+
+Erreur commençant à la ligne: 93 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES_CALCULE (IdSucces, MaximumRequis)
+	VALUES (8, 10)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.SUCCES_CALCULE_FK) - clé parent introuvable
+
+SQL> 
+SQL> INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+  2  	VALUES (1, 1, 1);
+
+Erreur commençant à la ligne: 96 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+	VALUES (1, 1, 1)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.SUCCES_REALISE_CONTENU_FK) - clé parent introuvable
+
+SQL> INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+  2  	VALUES (1, 1, 2);
+
+Erreur commençant à la ligne: 98 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+	VALUES (1, 1, 2)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.SUCCES_REALISE_CONTENU_FK) - clé parent introuvable
+
+SQL> INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+  2  	VALUES (1, 1, 3);
+
+Erreur commençant à la ligne: 100 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+	VALUES (1, 1, 3)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.SUCCES_REALISE_CONTENU_FK) - clé parent introuvable
+
+SQL> INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+  2  	VALUES (1, 2, 1);
+
+Erreur commençant à la ligne: 102 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+	VALUES (1, 2, 1)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.SUCCES_REALISE_CONTENU_FK) - clé parent introuvable
+
+SQL> INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+  2  	VALUES (5, 2, 6);
+
+Erreur commençant à la ligne: 104 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+	VALUES (5, 2, 6)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.SUCCES_REALISE_CONTENU_FK) - clé parent introuvable
+
+SQL> 
+SQL> INSERT INTO SUCCES_EN_COURS (IdContenu, NoJoueur, IdSucces, Compteur)
+  2  	VALUES (5, 2, 8, 7);
+
+Erreur commençant à la ligne: 107 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES_EN_COURS (IdContenu, NoJoueur, IdSucces, Compteur)
+	VALUES (5, 2, 8, 7)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.SUCCES_EN_COURS_CONTENU_FK) - clé parent introuvable
+
+SQL> 
+SQL> INSERT INTO FORFAIT (Code, Nom, Description)
+  2  	VALUES ('GOLD1', 'XBox Gold' , 'Abonnement pour jouer en ligne et avoir des promotions');
+
+1 ligne inséré.
+
+SQL> INSERT INTO FORFAIT (Code, Nom, Description)
+  2  	VALUES ('PASS1', 'XBox Game Pass' , 'Abonnement pour 100 jeux par mois');
+
+1 ligne inséré.
+
+SQL> INSERT INTO FORFAIT (Code, Nom, Description)
+  2  	VALUES ('STAND', NULL , NULL);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+  2  	VALUES (to_date('2019-01-11'), to_date('2019-12-31'), 100, 'GOLD1');
+
+Erreur commençant à la ligne: 117 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+	VALUES (to_date('2019-01-11'), to_date('2019-12-31'), 100, 'GOLD1')
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."PERIODE"."IDPERIODE")
+
+SQL> INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+  2  	VALUES (to_date('2018-01-11'), to_date('2018-12-31'), 90, 'GOLD1');
+
+Erreur commençant à la ligne: 119 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+	VALUES (to_date('2018-01-11'), to_date('2018-12-31'), 90, 'GOLD1')
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."PERIODE"."IDPERIODE")
+
+SQL> INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+  2  	VALUES (to_date('2019-06-11'), to_date('2019-10-31'), 50, 'PASS1');
+
+Erreur commençant à la ligne: 121 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+	VALUES (to_date('2019-06-11'), to_date('2019-10-31'), 50, 'PASS1')
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."PERIODE"."IDPERIODE")
+
+SQL> INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+  2  	VALUES (to_date('2000-01-01'), to_date('2030-12-31'), 0, 'STAND');
+
+Erreur commençant à la ligne: 123 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+	VALUES (to_date('2000-01-01'), to_date('2030-12-31'), 0, 'STAND')
+Rapport d'erreur -
+ORA-01400: impossible d'insérer NULL dans ("ORA8TRD157_42"."PERIODE"."IDPERIODE")
+
+SQL> 
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (1, 1, to_date('2019-06-06'));
+
+Erreur commençant à la ligne: 126 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+	VALUES (1, 1, to_date('2019-06-06'))
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (1, 2, to_date('2018-06-06'));
+
+Erreur commençant à la ligne: 128 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+	VALUES (1, 2, to_date('2018-06-06'))
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (1, 3, to_date('2019-10-06'));
+
+Erreur commençant à la ligne: 130 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+	VALUES (1, 3, to_date('2019-10-06'))
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (1, 4, to_date('2015-02-26'));
+
+Erreur commençant à la ligne: 132 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+	VALUES (1, 4, to_date('2015-02-26'))
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (2, 1, to_date('2019-04-04'));
+
+Erreur commençant à la ligne: 134 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+	VALUES (2, 1, to_date('2019-04-04'))
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (3, 1, to_date('2019-05-05'));
+
+Erreur commençant à la ligne: 136 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+	VALUES (3, 1, to_date('2019-05-05'))
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> 
+SQL> INSERT INTO RESEAU (Code, Nom, Description)
+  2  	VALUES ('LACKEN', 'Les amis du Lac Kénogami', 'Bienvenue à tous!');
+
+1 ligne inséré.
+
+SQL> INSERT INTO RESEAU (Code, Nom, Description, Actif)
+  2  	VALUES ('UQACBD', 'Le reseau des etudiants du 157', 'Tous les etudiants qui travaillent actuellement sur le PLSQL', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO RESEAU (Code, Nom, Description, Actif)
+  2  	VALUES ('FRANCO', 'Le reseau des francophones', 'Ici, pas de Bienvenue-Hi!', 0);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('LACKEN', 1);
+
+Erreur commençant à la ligne: 146 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+	VALUES ('LACKEN', 1)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.ABONNEMENT_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('UQACBD', 1);
+
+Erreur commençant à la ligne: 148 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+	VALUES ('UQACBD', 1)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.ABONNEMENT_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('FRANCO', 1);
+
+Erreur commençant à la ligne: 150 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+	VALUES ('FRANCO', 1)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.ABONNEMENT_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('FRANCO', 2);
+
+Erreur commençant à la ligne: 152 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+	VALUES ('FRANCO', 2)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.ABONNEMENT_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('FRANCO', 3);
+
+Erreur commençant à la ligne: 154 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+	VALUES ('FRANCO', 3)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.ABONNEMENT_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('UQACBD', 4);
+
+Erreur commençant à la ligne: 156 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+	VALUES ('UQACBD', 4)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.ABONNEMENT_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('UQACBD', 5);
+
+Erreur commençant à la ligne: 158 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+	VALUES ('UQACBD', 5)
+Rapport d'erreur -
+ORA-02291: violation de contrainte d'intégrité (ORA8TRD157_42.ABONNEMENT_NO_JOUEUR_FK) - clé parent introuvable
+
+SQL> 
+SQL> INSERT INTO STATUT_AMITIE (CodeStatut, Description)
+  2  	VALUES ('NOU', 'Nouveau ami');
+
+1 ligne inséré.
+
+SQL> INSERT INTO STATUT_AMITIE (CodeStatut, Description)
+  2  	VALUES ('FIN', 'Fin de l''amitié');
+
+1 ligne inséré.
+
+SQL> INSERT INTO STATUT_AMITIE (CodeStatut, Description)
+  2  	VALUES ('REL', 'Rel. distante seulement');
+
+1 ligne inséré.
+
+SQL> INSERT INTO STATUT_AMITIE (CodeStatut, Description)
+  2  	VALUES ('PRO', 'Rel. professionnelle');
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (1, 2, to_date('2019-06-08'), 'NOU');
+
+Erreur commençant à la ligne: 170 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+	VALUES (1, 2, to_date('2019-06-08'), 'NOU')
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (1, 6, to_date('2019-06-10'), 'FIN');
+
+Erreur commençant à la ligne: 172 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+	VALUES (1, 6, to_date('2019-06-10'), 'FIN')
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (2, 3, to_date('2019-01-01'), 'NOU');
+
+Erreur commençant à la ligne: 174 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+	VALUES (2, 3, to_date('2019-01-01'), 'NOU')
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (2, 4, to_date('2019-02-02'), 'NOU');
+
+Erreur commençant à la ligne: 176 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+	VALUES (2, 4, to_date('2019-02-02'), 'NOU')
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (2, 5, to_date('2019-03-03'), 'PRO');
+
+Erreur commençant à la ligne: 178 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+	VALUES (2, 5, to_date('2019-03-03'), 'PRO')
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (6, 2, to_date('2019-04-04'), 'REL');
+
+Erreur commençant à la ligne: 180 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+	VALUES (6, 2, to_date('2019-04-04'), 'REL')
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (3, 6, to_date('2019-06-04'), 'NOU');
+
+Erreur commençant à la ligne: 182 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\creation_donnees.sql
+Dans la commande -
+INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+	VALUES (3, 6, to_date('2019-06-04'), 'NOU')
+Rapport d'erreur -
+ORA-01861: le littéral ne concorde pas avec le format chaîne de caractères
+
+SQL> 
+SQL> spool off

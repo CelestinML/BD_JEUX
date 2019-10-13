@@ -1,0 +1,622 @@
+SQL> 
+SQL> @check_contraintes.sql JOUEUR;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('JOUEUR')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+JOUEUR_PK                      PK     JOUEUR                                                                                                         
+JOUEUR_UNIQUE                  UNIQUE JOUEUR                                                                                                         
+CHECK_JOUEUR_ACTIF             check  JOUEUR                                                                                                         
+                                                                     		Actif IN ('1', '0')                                                             
+                                                                     	                                                                                
+
+SYS_C00452454                  check  JOUEUR                         "NOJOUEUR" IS NOT NULL                                                          
+SYS_C00452455                  check  JOUEUR                         "COURRIEL" IS NOT NULL                                                          
+SYS_C00452456                  check  JOUEUR                         "SURNOM" IS NOT NULL                                                            
+
+6 lignes sélectionnées. 
+
+SQL> @check_contraintes.sql ESRB;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('ESRB')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+ESRB_PK                        PK     ESRB                                                                                                           
+SYS_C00452457                  check  ESRB                           "CODE" IS NOT NULL                                                              
+SYS_C00452458                  check  ESRB                           "DESCRIPTION" IS NOT NULL                                                       
+
+SQL> @check_contraintes.sql GENRE;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('GENRE')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+GENRE_PK                       PK     GENRE                                                                                                          
+GENRE_FK                       FK     GENRE                                                                                                          
+SYS_C00452459                  check  GENRE                          "CODE" IS NOT NULL                                                              
+SYS_C00452460                  check  GENRE                          "DESCRIPTION" IS NOT NULL                                                       
+SYS_C00452461                  check  GENRE                          "CODEGENREPARENT" IS NOT NULL                                                   
+
+SQL> @check_contraintes.sql SOUS_GENRE_JEU;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('SOUS_GENRE_JEU')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SOUS_GENRE_JEU_PK              PK     SOUS_GENRE_JEU                                                                                                 
+SOUS_GENRE_JEU_SOUS_GENRE_FK   FK     SOUS_GENRE_JEU                                                                                                 
+SOUS_GENRE_JEU_ID_JEU_FK       FK     SOUS_GENRE_JEU                                                                                                 
+SYS_C00452462                  check  SOUS_GENRE_JEU                 "CODESOUSGENRE" IS NOT NULL                                                     
+SYS_C00452463                  check  SOUS_GENRE_JEU                 "IDJEU" IS NOT NULL                                                             
+
+SQL> @check_contraintes.sql JEU;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('JEU')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+JEU_PK                         PK     JEU                                                                                                            
+JEU_CODE_ESRB_FK               FK     JEU                                                                                                            
+JEU_CODE_GENRE_FK              FK     JEU                                                                                                            
+SYS_C00452464                  check  JEU                            "IDJEU" IS NOT NULL                                                             
+SYS_C00452465                  check  JEU                            "NOM" IS NOT NULL                                                               
+SYS_C00452466                  check  JEU                            "DESCRIPTION" IS NOT NULL                                                       
+
+6 lignes sélectionnées. 
+
+SQL> @check_contraintes.sql CONTENU;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('CONTENU')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+CONTENU_PK                     PK     CONTENU                                                                                                        
+CONTENU_FK                     FK     CONTENU                                                                                                        
+CHECK_CONTENU_TYPE             check  CONTENU                                                                                                        
+                                                                     		TypeContenu IN ('J', 'D', 'O')                                                  
+                                                                     	                                                                                
+
+SYS_C00452467                  check  CONTENU                        "IDCONTENU" IS NOT NULL                                                         
+SYS_C00452468                  check  CONTENU                        "NOM" IS NOT NULL                                                               
+SYS_C00452469                  check  CONTENU                        "DESCRIPTION" IS NOT NULL                                                       
+SYS_C00452470                  check  CONTENU                        "TYPECONTENU" IS NOT NULL                                                       
+SYS_C00452471                  check  CONTENU                        "IDJEU" IS NOT NULL                                                             
+
+8 lignes sélectionnées. 
+
+SQL> @check_contraintes.sql CONTENU_POSSEDE;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('CONTENU_POSSEDE')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+CONTENU_POSSEDE_PK             PK     CONTENU_POSSEDE                                                                                                
+CONTENU_POSSEDE_ID_CONTENU_FK  FK     CONTENU_POSSEDE                                                                                                
+CONTENU_POSSEDE_NO_JOUEUR_FK   FK     CONTENU_POSSEDE                                                                                                
+SYS_C00452472                  check  CONTENU_POSSEDE                "IDCONTENU" IS NOT NULL                                                         
+SYS_C00452473                  check  CONTENU_POSSEDE                "NOJOUEUR" IS NOT NULL                                                          
+
+SQL> @check_contraintes.sql SUCCES;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('SUCCES')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SUCCES_PK                      PK     SUCCES                                                                                                         
+SUCCES_FK                      FK     SUCCES                                                                                                         
+CHECK_SUCCES_VALEUR            check  SUCCES                         Valeur > 0                                                                      
+SYS_C00452474                  check  SUCCES                         "IDSUCCES" IS NOT NULL                                                          
+SYS_C00452475                  check  SUCCES                         "TITRE" IS NOT NULL                                                             
+SYS_C00452476                  check  SUCCES                         "IDCONTENU" IS NOT NULL                                                         
+
+6 lignes sélectionnées. 
+
+SQL> @check_contraintes.sql SUCCES_CALCULE;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('SUCCES_CALCULE')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SUCCES_CALCULE_PK              PK     SUCCES_CALCULE                                                                                                 
+SUCCES_CALCULE_FK              FK     SUCCES_CALCULE                                                                                                 
+CHECK_SUCCES_C_MAX_REQUIS      check  SUCCES_CALCULE                 MaximumRequis > 0                                                               
+SYS_C00452477                  check  SUCCES_CALCULE                 "IDSUCCES" IS NOT NULL                                                          
+SYS_C00452478                  check  SUCCES_CALCULE                 "MAXIMUMREQUIS" IS NOT NULL                                                     
+
+SQL> @check_contraintes.sql SUCCES_REALISE;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('SUCCES_REALISE')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SUCCES_REALISE_PK              PK     SUCCES_REALISE                                                                                                 
+SUCCES_REALISE_ID_SUCCES_FK    FK     SUCCES_REALISE                                                                                                 
+SUCCES_REALISE_CONTENU_FK      FK     SUCCES_REALISE                                                                                                 
+SYS_C00452479                  check  SUCCES_REALISE                 "IDCONTENU" IS NOT NULL                                                         
+SYS_C00452480                  check  SUCCES_REALISE                 "NOJOUEUR" IS NOT NULL                                                          
+SYS_C00452481                  check  SUCCES_REALISE                 "IDSUCCES" IS NOT NULL                                                          
+
+6 lignes sélectionnées. 
+
+SQL> @check_contraintes.sql SUCCES_EN_COURS;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('SUCCES_EN_COURS')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SUCCES_EN_COURS_PK             PK     SUCCES_EN_COURS                                                                                                
+SUCCES_EN_COURS_ID_SUCCES_FK   FK     SUCCES_EN_COURS                                                                                                
+SUCCES_EN_COURS_CONTENU_FK     FK     SUCCES_EN_COURS                                                                                                
+CHECK_SUCCES_EN_COURS_COMPTEUR check  SUCCES_EN_COURS                Compteur > 0                                                                    
+SYS_C00452482                  check  SUCCES_EN_COURS                "IDCONTENU" IS NOT NULL                                                         
+SYS_C00452483                  check  SUCCES_EN_COURS                "NOJOUEUR" IS NOT NULL                                                          
+SYS_C00452484                  check  SUCCES_EN_COURS                "IDSUCCES" IS NOT NULL                                                          
+SYS_C00452485                  check  SUCCES_EN_COURS                "COMPTEUR" IS NOT NULL                                                          
+
+8 lignes sélectionnées. 
+
+SQL> @check_contraintes.sql FORFAIT;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('FORFAIT')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+FORFAIT_PK                     PK     FORFAIT                                                                                                        
+SYS_C00452486                  check  FORFAIT                        "CODE" IS NOT NULL                                                              
+
+SQL> @check_contraintes.sql PERIODE;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('PERIODE')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+PERIODE_PK                     PK     PERIODE                                                                                                        
+PERIODE_FK                     FK     PERIODE                                                                                                        
+CHECK_PERIODE_PRIX             check  PERIODE                        Prix >= 0                                                                       
+SYS_C00452487                  check  PERIODE                        "IDPERIODE" IS NOT NULL                                                         
+SYS_C00452488                  check  PERIODE                        "DATEDEBUT" IS NOT NULL                                                         
+SYS_C00452489                  check  PERIODE                        "DATEFIN" IS NOT NULL                                                           
+SYS_C00452490                  check  PERIODE                        "PRIX" IS NOT NULL                                                              
+SYS_C00452491                  check  PERIODE                        "CODEFORFAIT" IS NOT NULL                                                       
+
+8 lignes sélectionnées. 
+
+SQL> @check_contraintes.sql PERIODE_FORFAIT_JOUEUR;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('PERIODE_FORFAIT_JOUEUR')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+PERIODE_FORFAIT_JOUEUR_PK      PK     PERIODE_FORFAIT_JOUEUR                                                                                         
+PERIODE_FORF_J_ID_PERIODE_FK   FK     PERIODE_FORFAIT_JOUEUR                                                                                         
+PERIODE_FORF_J_NO_JOUEUR_FK    FK     PERIODE_FORFAIT_JOUEUR                                                                                         
+SYS_C00452492                  check  PERIODE_FORFAIT_JOUEUR         "IDPERIODE" IS NOT NULL                                                         
+SYS_C00452493                  check  PERIODE_FORFAIT_JOUEUR         "NOJOUEUR" IS NOT NULL                                                          
+SYS_C00452494                  check  PERIODE_FORFAIT_JOUEUR         "DATEACHAT" IS NOT NULL                                                         
+
+6 lignes sélectionnées. 
+
+SQL> @check_contraintes.sql RESEAU;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('RESEAU')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+RESEAU_PK                      PK     RESEAU                                                                                                         
+CHECK_RESEAU_ACTIF             check  RESEAU                                                                                                         
+                                                                     		Actif IN ('1', '0')                                                             
+                                                                     	                                                                                
+
+SYS_C00452495                  check  RESEAU                         "CODE" IS NOT NULL                                                              
+SYS_C00452496                  check  RESEAU                         "NOM" IS NOT NULL                                                               
+SYS_C00452497                  check  RESEAU                         "DESCRIPTION" IS NOT NULL                                                       
+SYS_C00452498                  check  RESEAU                         "ACTIF" IS NOT NULL                                                             
+
+6 lignes sélectionnées. 
+
+SQL> @check_contraintes.sql ABONNEMENT_RESEAU;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('ABONNEMENT_RESEAU')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+ABONNEMENT_RESEAU_PK           PK     ABONNEMENT_RESEAU                                                                                              
+ABONNEMENT_CODE_RESEAU_FK      FK     ABONNEMENT_RESEAU                                                                                              
+ABONNEMENT_NO_JOUEUR_FK        FK     ABONNEMENT_RESEAU                                                                                              
+SYS_C00452499                  check  ABONNEMENT_RESEAU              "CODERESEAU" IS NOT NULL                                                        
+SYS_C00452500                  check  ABONNEMENT_RESEAU              "NOJOUEUR" IS NOT NULL                                                          
+
+SQL> @check_contraintes.sql SUIVI_RESEAU;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('SUIVI_RESEAU')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00452504                  check  SUIVI_RESEAU                   "DATESUIVI" IS NOT NULL                                                         
+SYS_C00452505                  check  SUIVI_RESEAU                   "ACTION" IS NOT NULL                                                            
+SYS_C00452506                  check  SUIVI_RESEAU                   "NOJOUEUR" IS NOT NULL                                                          
+SUIVI_RESEAU_PK                PK     SUIVI_RESEAU                                                                                                   
+SUIVI_RESEAU_CODE_RESEAU_FK    FK     SUIVI_RESEAU                                                                                                   
+SUIVI_RESEAU_NO_JOUEUR_FK      FK     SUIVI_RESEAU                                                                                                   
+CHECK_SUIVI_RESEAU_ACTION      check  SUIVI_RESEAU                                                                                                   
+                                                                     		Action IN ('CRE', 'SUP', 'ACT', 'DES', 'ABO', 'DSA')                            
+                                                                     	                                                                                
+
+SYS_C00452501                  check  SUIVI_RESEAU                   "IDSUIVI" IS NOT NULL                                                           
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00452502                  check  SUIVI_RESEAU                   "MOMENT" IS NOT NULL                                                            
+SYS_C00452503                  check  SUIVI_RESEAU                   "CODERESEAU" IS NOT NULL                                                        
+
+10 lignes sélectionnées. 
+
+SQL> @check_contraintes.sql AMI;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('AMI')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00452507                  check  AMI                            "NOJOUEURINVITANT" IS NOT NULL                                                  
+SYS_C00452508                  check  AMI                            "NOJOUEURINVITE" IS NOT NULL                                                    
+SYS_C00452509                  check  AMI                            "CODESTATUT" IS NOT NULL                                                        
+AMI_PK                         PK     AMI                                                                                                            
+AMI_CODE_STATUT_FK             FK     AMI                                                                                                            
+AMI_NO_JOUEUR_INVITANT_FK      FK     AMI                                                                                                            
+AMI_NO_JOUEUR_INVITE_FK        FK     AMI                                                                                                            
+
+7 lignes sélectionnées. 
+
+SQL> @check_contraintes.sql STATUT_AMITIE;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('STATUT_AMITIE')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00452510                  check  STATUT_AMITIE                  "CODESTATUT" IS NOT NULL                                                        
+SYS_C00452511                  check  STATUT_AMITIE                  "DESCRIPTION" IS NOT NULL                                                       
+STATUT_AMITIE_PK               PK     STATUT_AMITIE                                                                                                  
+
+SQL> @check_contraintes.sql SUIVI_AMITIE;
+SQL> SELECT 
+  2  	constraint_name as NOM, 
+  3  	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+  4  	table_name as TABLE_, search_condition as CONDITION_ 
+  5  FROM 	USER_CONSTRAINTS 
+  6  WHERE	table_name=UPPER('&1');
+ancien :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('&1')
+nouveau :SELECT 
+	constraint_name as NOM, 
+	decode(constraint_type, 'C', 'check', 'P', 'PK ', 'U', 'UNIQUE', 'R', 'FK') as TYPE, 
+	table_name as TABLE_, search_condition as CONDITION_ 
+FROM 	USER_CONSTRAINTS 
+WHERE	table_name=UPPER('SUIVI_AMITIE')
+
+NOM                            TYPE   TABLE_                         CONDITION_                                                                      
+------------------------------ ------ ------------------------------ --------------------------------------------------------------------------------
+SYS_C00452512                  check  SUIVI_AMITIE                   "IDSUIVI" IS NOT NULL                                                           
+SYS_C00452513                  check  SUIVI_AMITIE                   "MOMENT" IS NOT NULL                                                            
+SYS_C00452514                  check  SUIVI_AMITIE                   "NOJOUEURINVITANT" IS NOT NULL                                                  
+SYS_C00452515                  check  SUIVI_AMITIE                   "NOJOUEURINVITE" IS NOT NULL                                                    
+SYS_C00452516                  check  SUIVI_AMITIE                   "DATESUIVI" IS NOT NULL                                                         
+SYS_C00452517                  check  SUIVI_AMITIE                   "CODESTATUT" IS NOT NULL                                                        
+SUIVI_AMITIE_PK                PK     SUIVI_AMITIE                                                                                                   
+SUIVI_AMI_NO_J_INVITANT_FK     FK     SUIVI_AMITIE                                                                                                   
+SUIVI_AMI_NO_J_INVITE_FK       FK     SUIVI_AMITIE                                                                                                   
+SUIVI_AMITIE_CODE_STATUT_FK    FK     SUIVI_AMITIE                                                                                                   
+
+10 lignes sélectionnées. 
+
+SQL> 
+SQL> spool off
