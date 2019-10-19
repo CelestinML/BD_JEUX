@@ -92,7 +92,7 @@ BEGIN
             SELECT MAX(prix_forfait_actuel) INTO prix_actuel FROM DUAL;
         END;
         --Fin de la recherche du prix du forfait actuel
-        IF prix_actuel > prix_forfait_plus_actif THEN
+        IF prix_actuel > prix_forfait_plus_populaire THEN
             prix_max := FALSE;
         END IF;
         FETCH forfaits INTO code_forfait_actuel;
@@ -101,7 +101,7 @@ BEGIN
     IF NOT(prix_max) THEN
         UPDATE PERIODE 
         SET PRIX = PRIX + 0.1*PRIX
-        WHERE CODEFORFAIT = code_forfait_plus_actif;
+        WHERE CODEFORFAIT = code_forfait_plus_populaire;
     END IF;
   
 END AJUSTERPROMOTION;
