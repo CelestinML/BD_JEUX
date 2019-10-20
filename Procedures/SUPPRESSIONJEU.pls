@@ -1,6 +1,6 @@
-CREATE OR REPLACE PROCEDURE SUPPRESSIONJEU(nom_du_jeu IN VARCHAR2, etat_sortie OUT INT) AS 
+CREATE OR REPLACE PROCEDURE SUPPRESSIONJEU(nom_du_jeu IN JEU.NOM%TYPE, etat_sortie OUT INT) AS 
 
-    id_jeu NUMBER(38,0);
+    id_jeu JEU.IDJEU%TYPE;
 
 BEGIN
     --On identifie l'ID du jeu, nécessaire pour accéder aux autres tables
@@ -16,9 +16,10 @@ BEGIN
         
             nb_contenus_jeu INT;
         BEGIN
-            SELECT COUNT(contenus_jeu)
-            INTO nb_contenus_jeu
-            FROM DUAL;
+            
+            OPEN contenus_jeu;
+            
+            nb_contenus_jeu := contenus_jeu%ROWCOUNT;
         
             IF nb_contenus_jeu > 0 THEN
         
@@ -29,17 +30,21 @@ BEGIN
         
                     nb_joueurs_jeu INT;
                 BEGIN
-                    SELECT COUNT(joueurs_possedant_contenu)
-                    INTO nb_joueurs_jeu
-                    FROM DUAL;
+                
+                    OPEN joueurs_possedant_contenu;
+                    
+                    nb_joueurs_jeu := joueurs_possedant_contenu%ROWCOUNT;
+                    
                     IF nb_joueurs_jeu > 0 THEN
                         DECLARE
                             CURSOR succes_jeu IS
                             SELECT IDSUCCES FROM SUCCES
                             WHERE IDCONTENU IN contenus_jeu;
                         BEGIN
-                            SET AUTOCOMMIT OFF;
-                            SET TRANSACTION NAME 'supressions'
+                        
+                            OPEN succes_jeu;
+                        
+                            SET TRANSACTION NAME 'supressions';
                                 DELETE
                                 FROM SUCCES_EN_COURS
                                 WHERE IDSUCCES IN succes_jeu;
@@ -59,14 +64,23 @@ BEGIN
                                 FROM JEU
                                 WHERE NOM = nom_du_jeu;
                             COMMIT;
+                            
+                            CLOSE succes_jeu;
+                            
                         END;
                     ELSE
                         etat_sortie := 3;
                     END IF;
+                    
+                    CLOSE joueurs_possedant_contenu;
+                    
                 END;
             ELSE
                 etat_sortie := 1;
             END IF;
+            
+            CLOSE contenus_jeu;
+            
         END;
         
     ELSE
