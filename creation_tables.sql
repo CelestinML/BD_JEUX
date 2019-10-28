@@ -32,7 +32,7 @@ CREATE TABLE JEU(
 	Description						VARCHAR2(256)	NOT NULL,
 	CodeESRB						CHAR(1),
 	CodeGenre						CHAR(3)
-);
+);	
 
 CREATE TABLE CONTENU(
 	IdContenu						INTEGER			NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE SUIVI_RESEAU(
 	CodeReseau						CHAR(6)			NOT NULL,
 	DateSuivi						DATE			NOT NULL,
 	Action							CHAR(3)			NOT NULL,
-	NoJoueur						INTEGER			NOT NULL	
+	NoJoueur						INTEGER
 );
 
 CREATE TABLE AMI(

@@ -1,3 +1,3 @@
 @suppression.sql
 @creation.sql
-@check_contraintes_complet.sql
+REM @check_contraintes_complet.sql

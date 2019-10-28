@@ -43,6 +43,8 @@ INSERT INTO JEU (Nom, Description, CodeESRB, CodeGenre)
 	VALUES ('TOMB RAIDER', 'Les aventures de Lara Croft', 'T', 'ACT');
 INSERT INTO JEU (Nom, Description, CodeESRB, CodeGenre)
 	VALUES ('Dying Light', 'Survivre dans un monde infesté de zombie. Bonne nuit!', 'M', 'HOR');
+INSERT INTO JEU (Nom, Description, CodeESRB, CodeGenre)
+	VALUES ('CANDY CRUSH', 'Le super jeu', 'T', 'HOR');
 
 INSERT INTO SOUS_GENRE_JEU (CodeSousGenre, IdJeu)
 	VALUES ('AVT', 1);
@@ -59,6 +61,8 @@ INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
 	VALUES ('Ensemble d''exploration', 'Équipements supplémentaires pour l''aventure', to_date('2018-12-01'), 'O', 1);
 INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
 	VALUES ('Chicago', 'La ville infestée de Chicago', to_date('2018-09-09'), 'J', 2);
+INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+	VALUES ('Niveau1', 'Les 10 premiers niveaux', to_date('2019-01-24'), 'J', 3);
 
 INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
 	VALUES (1, 1);
@@ -72,6 +76,14 @@ INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
 	VALUES (1, 2);
 INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
 	VALUES (5, 2);
+INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+	VALUES (1, 3);
+INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+	VALUES (2, 3);
+INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+	VALUES (3, 3);
+INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+	VALUES (4, 3);
 
 INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
 	VALUES ('Survivre', 'Vous avez réussi à traverser la foret amazonienne', 50, 1);
@@ -89,9 +101,13 @@ INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
 	VALUES ('Mission_1', 'Vaincre le gros méchant zombie à la fin de la mission', 10, 5);
 INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
 	VALUES ('Herboriste', 'Recuperer des plantes médécinales', 5, 5);
+INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+	VALUES ('Super bonbonnier', 'Reussir 5X un tableau en 10 secondes', 5, 6);
 
 INSERT INTO SUCCES_CALCULE (IdSucces, MaximumRequis)
 	VALUES (8, 10);
+INSERT INTO SUCCES_CALCULE (IdSucces, MaximumRequis)
+	VALUES (9, 5);
 
 INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
 	VALUES (1, 1, 1);
@@ -115,7 +131,7 @@ INSERT INTO FORFAIT (Code, Nom, Description)
 	VALUES ('STAND', NULL , NULL);
 
 INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
-	VALUES (to_date('2019-01-11'), to_date('2019-12-31'), 100, 'GOLD1');
+	VALUES (to_date('2019-01-11'), to_date('2019-12-31'), 80, 'GOLD1');
 INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
 	VALUES (to_date('2018-01-11'), to_date('2018-12-31'), 90, 'GOLD1');
 INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
