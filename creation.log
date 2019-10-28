@@ -1,0 +1,1551 @@
+SQL> 
+SQL> @creation_tables.sql
+SQL> REM CREATION DES TABLES
+SQL> 
+SQL> CREATE TABLE JOUEUR(
+  2  	NoJoueur						INTEGER			NOT NULL,
+  3  	Courriel						VARCHAR2(256)	NOT NULL,
+  4  	Surnom							VARCHAR2(50)	NOT NULL,
+  5  	Miniature						BLOB,
+  6  	Nom								VARCHAR2(100),
+  7  	Prenom							VARCHAR2(100),
+  8  	Actif							CHAR(1)
+  9  );
+
+Table JOUEUR créé(e).
+
+SQL> 
+SQL> CREATE TABLE ESRB(
+  2  	Code							CHAR(1)			NOT NULL,
+  3  	Description						VARCHAR2(50)	NOT NULL
+  4  );
+
+Table ESRB créé(e).
+
+SQL> 
+SQL> CREATE TABLE GENRE(
+  2  	Code							CHAR(3)			NOT NULL,
+  3  	Description						VARCHAR2(50)	NOT NULL,
+  4  	CodeGenreParent					CHAR(3)			NOT NULL
+  5  );
+
+Table GENRE créé(e).
+
+SQL> 
+SQL> CREATE TABLE SOUS_GENRE_JEU(
+  2  	CodeSousGenre					CHAR(3)			NOT NULL,
+  3  	IdJeu							INTEGER			NOT NULL
+  4  );
+
+Table SOUS_GENRE_JEU créé(e).
+
+SQL> 
+SQL> CREATE TABLE JEU(
+  2  	IdJeu							INTEGER			NOT NULL,
+  3  	Nom								VARCHAR2(100)	NOT NULL,
+  4  	Description						VARCHAR2(256)	NOT NULL,
+  5  	CodeESRB						CHAR(1),
+  6  	CodeGenre						CHAR(3)
+  7  );
+
+Table JEU créé(e).
+
+SQL> 
+SQL> CREATE TABLE CONTENU(
+  2  	IdContenu						INTEGER			NOT NULL,
+  3  	Nom								VARCHAR2(100)	NOT NULL,
+  4  	Description						VARCHAR2(256)	NOT NULL,
+  5  	DateSortie						DATE,
+  6  	TypeContenu						VARCHAR2(1)		NOT NULL,
+  7  	IdJeu							INTEGER			NOT NULL	
+  8  );
+
+Table CONTENU créé(e).
+
+SQL> 
+SQL> CREATE TABLE CONTENU_POSSEDE(
+  2  	IdContenu						INTEGER			NOT NULL,
+  3  	NoJoueur						INTEGER			NOT NULL
+  4  );
+
+Table CONTENU_POSSEDE créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUCCES(
+  2  	IdSucces						INTEGER			NOT NULL,
+  3  	Titre							VARCHAR2(50)	NOT NULL,
+  4  	Description						VARCHAR2(256),
+  5  	Image							BLOB,
+  6  	Valeur							NUMBER(3,0),
+  7  	IdContenu						INTEGER			NOT NULL	
+  8  );
+
+Table SUCCES créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUCCES_CALCULE(
+  2  	IdSucces						INTEGER			NOT NULL,
+  3  	MaximumRequis					NUMBER(3,0)		NOT NULL
+  4  );
+
+Table SUCCES_CALCULE créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUCCES_REALISE(
+  2  	IdContenu						INTEGER			NOT NULL,
+  3  	NoJoueur						INTEGER			NOT NULL,
+  4  	IdSucces						INTEGER			NOT NULL
+  5  );
+
+Table SUCCES_REALISE créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUCCES_EN_COURS(
+  2  	IdContenu						INTEGER			NOT NULL,
+  3  	NoJoueur						INTEGER			NOT NULL,
+  4  	IdSucces						INTEGER			NOT NULL,
+  5  	Compteur						NUMBER(3,0)		NOT NULL
+  6  );
+
+Table SUCCES_EN_COURS créé(e).
+
+SQL> 
+SQL> 
+SQL> CREATE TABLE FORFAIT(
+  2  	Code							CHAR(5)			NOT NULL,
+  3  	Nom								VARCHAR2(100),
+  4  	Description						VARCHAR2(1000)
+  5  );
+
+Table FORFAIT créé(e).
+
+SQL> 
+SQL> CREATE TABLE PERIODE(
+  2  	IdPeriode						INTEGER			NOT NULL,
+  3  	DateDebut						DATE			NOT NULL,
+  4  	DateFin							DATE			NOT NULL,
+  5  	Prix							NUMBER (6,2)	NOT NULL,
+  6  	CodeForfait						CHAR(5)			NOT NULL
+  7  );
+
+Table PERIODE créé(e).
+
+SQL> 
+SQL> CREATE TABLE PERIODE_FORFAIT_JOUEUR(
+  2  	IdPeriode						INTEGER			NOT NULL,
+  3  	NoJoueur						INTEGER			NOT NULL,
+  4  	DateAchat						DATE			NOT NULL
+  5  );
+
+Table PERIODE_FORFAIT_JOUEUR créé(e).
+
+SQL> 
+SQL> CREATE TABLE RESEAU(
+  2  	Code							CHAR(6)			NOT NULL,
+  3  	Nom								VARCHAR2(50)	NOT NULL,
+  4  	Description						VARCHAR2(100)	NOT NULL,
+  5  	Actif							VARCHAR2(1)		NOT NULL
+  6  );
+
+Table RESEAU créé(e).
+
+SQL> 
+SQL> CREATE TABLE ABONNEMENT_RESEAU(
+  2  	CodeReseau						CHAR(6)			NOT NULL,
+  3  	NoJoueur						INTEGER			NOT NULL
+  4  );
+
+Table ABONNEMENT_RESEAU créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUIVI_RESEAU(
+  2  	IdSuivi							INTEGER			NOT NULL,
+  3  	Moment							TIMESTAMP		NOT NULL,
+  4  	CodeReseau						CHAR(6)			NOT NULL,
+  5  	DateSuivi						DATE			NOT NULL,
+  6  	Action							CHAR(3)			NOT NULL,
+  7  	NoJoueur						INTEGER
+  8  );
+
+Table SUIVI_RESEAU créé(e).
+
+SQL> 
+SQL> CREATE TABLE AMI(
+  2  	NoJoueurInvitant				INTEGER			NOT NULL,	
+  3  	NoJoueurInvite					INTEGER			NOT NULL,	
+  4  	DateDebut						DATE,
+  5  	CodeStatut						CHAR(3)			NOT NULL	
+  6  );
+
+Table AMI créé(e).
+
+SQL> 
+SQL> CREATE TABLE STATUT_AMITIE(
+  2  	CodeStatut						CHAR(3)			NOT NULL,
+  3  	Description						VARCHAR2(25)	NOT NULL	
+  4  );
+
+Table STATUT_AMITIE créé(e).
+
+SQL> 
+SQL> CREATE TABLE SUIVI_AMITIE(
+  2  	IdSuivi							INTEGER			NOT NULL,
+  3  	Moment							TIMESTAMP		NOT NULL,
+  4  	NoJoueurInvitant				INTEGER			NOT NULL,	
+  5  	NoJoueurInvite					INTEGER			NOT NULL,	
+  6  	DateSuivi						DATE			NOT NULL,
+  7  	CodeStatut						CHAR(3)			NOT NULL
+  8  );
+
+Table SUIVI_AMITIE créé(e).
+
+SQL> @creation_contraintes.sql
+SQL> REM CLÉS PRIMAIRES (PK)
+SQL> 
+SQL> ALTER TABLE JOUEUR
+  2  	ADD CONSTRAINT JOUEUR_PK
+  3  	PRIMARY KEY (NoJoueur)	
+  4  	USING INDEX;
+
+Table JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE ESRB
+  2  	ADD CONSTRAINT ESRB_PK
+  3  	PRIMARY KEY (Code)	
+  4  	USING INDEX;
+
+Table ESRB modifié(e).
+
+SQL> 
+SQL> ALTER TABLE GENRE
+  2  	ADD CONSTRAINT GENRE_PK
+  3  	PRIMARY KEY (Code)	
+  4  	USING INDEX;
+
+Table GENRE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SOUS_GENRE_JEU
+  2  	ADD CONSTRAINT SOUS_GENRE_JEU_PK
+  3  	PRIMARY KEY (CodeSousGenre, IdJeu)	
+  4  	USING INDEX;
+
+Table SOUS_GENRE_JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE JEU
+  2  	ADD CONSTRAINT JEU_PK
+  3  	PRIMARY KEY (IdJeu)	
+  4  	USING INDEX;
+
+Table JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE CONTENU
+  2  	ADD CONSTRAINT CONTENU_PK
+  3  	PRIMARY KEY (IdContenu)	
+  4  	USING INDEX;
+
+Table CONTENU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE CONTENU_POSSEDE
+  2  	ADD CONSTRAINT CONTENU_POSSEDE_PK
+  3  	PRIMARY KEY (IdContenu, NoJoueur)	
+  4  	USING INDEX;
+
+Table CONTENU_POSSEDE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES
+  2  	ADD CONSTRAINT SUCCES_PK
+  3  	PRIMARY KEY (IdSucces)	
+  4  	USING INDEX;
+
+Table SUCCES modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_CALCULE
+  2  	ADD CONSTRAINT SUCCES_CALCULE_PK
+  3  	PRIMARY KEY (IdSucces)	
+  4  	USING INDEX;
+
+Table SUCCES_CALCULE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_REALISE
+  2  	ADD CONSTRAINT SUCCES_REALISE_PK
+  3  	PRIMARY KEY (IdContenu, NoJoueur, IdSucces)	
+  4  	USING INDEX;
+
+Table SUCCES_REALISE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_EN_COURS
+  2  	ADD CONSTRAINT SUCCES_EN_COURS_PK
+  3  	PRIMARY KEY (IdContenu, NoJoueur, IdSucces)	
+  4  	USING INDEX;
+
+Table SUCCES_EN_COURS modifié(e).
+
+SQL> 
+SQL> ALTER TABLE FORFAIT
+  2  	ADD CONSTRAINT FORFAIT_PK
+  3  	PRIMARY KEY (Code)	
+  4  	USING INDEX;
+
+Table FORFAIT modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE
+  2  	ADD CONSTRAINT PERIODE_PK
+  3  	PRIMARY KEY (IdPeriode)	
+  4  	USING INDEX;
+
+Table PERIODE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE_FORFAIT_JOUEUR
+  2  	ADD CONSTRAINT PERIODE_FORFAIT_JOUEUR_PK
+  3  	PRIMARY KEY (IdPeriode, NoJoueur)
+  4  	USING INDEX;
+
+Table PERIODE_FORFAIT_JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE RESEAU
+  2  	ADD CONSTRAINT RESEAU_PK
+  3  	PRIMARY KEY (Code)	
+  4  	USING INDEX;
+
+Table RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE ABONNEMENT_RESEAU
+  2  	ADD CONSTRAINT ABONNEMENT_RESEAU_PK
+  3  	PRIMARY KEY (CodeReseau, NoJoueur)	
+  4  	USING INDEX;
+
+Table ABONNEMENT_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_RESEAU
+  2  	ADD CONSTRAINT SUIVI_RESEAU_PK
+  3  	PRIMARY KEY (IdSuivi)	
+  4  	USING INDEX;
+
+Table SUIVI_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE AMI
+  2  	ADD CONSTRAINT AMI_PK
+  3  	PRIMARY KEY (NoJoueurInvitant, NoJoueurInvite)	
+  4  	USING INDEX;
+
+Table AMI modifié(e).
+
+SQL> 
+SQL> ALTER TABLE STATUT_AMITIE
+  2  	ADD CONSTRAINT STATUT_AMITIE_PK
+  3  	PRIMARY KEY (CodeStatut)	
+  4  	USING INDEX;
+
+Table STATUT_AMITIE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_AMITIE
+  2  	ADD CONSTRAINT SUIVI_AMITIE_PK
+  3  	PRIMARY KEY (IdSuivi)	
+  4  	USING INDEX;
+
+Table SUIVI_AMITIE modifié(e).
+
+SQL> 
+SQL> 
+SQL> REM CLÉS ÉTRANGÈRES (FK)
+SQL> 
+SQL> ALTER TABLE GENRE
+  2  	ADD CONSTRAINT GENRE_FK
+  3  	FOREIGN KEY (CodeGenreParent)
+  4  	REFERENCES GENRE (Code);
+
+Table GENRE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SOUS_GENRE_JEU
+  2  	ADD CONSTRAINT SOUS_GENRE_JEU_SOUS_GENRE_FK
+  3  	FOREIGN KEY (CodeSousGenre)
+  4  	REFERENCES GENRE (Code);
+
+Table SOUS_GENRE_JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SOUS_GENRE_JEU
+  2  	ADD CONSTRAINT SOUS_GENRE_JEU_ID_JEU_FK
+  3  	FOREIGN KEY (IdJeu)
+  4  	REFERENCES JEU (IdJeu);
+
+Table SOUS_GENRE_JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE JEU
+  2  	ADD CONSTRAINT JEU_CODE_ESRB_FK
+  3  	FOREIGN KEY (CodeESRB)
+  4  	REFERENCES ESRB (Code);
+
+Table JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE JEU
+  2  	ADD CONSTRAINT JEU_CODE_GENRE_FK
+  3  	FOREIGN KEY (CodeGenre)
+  4  	REFERENCES GENRE (Code);
+
+Table JEU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE CONTENU
+  2  	ADD CONSTRAINT CONTENU_FK
+  3  	FOREIGN KEY (IdJeu)
+  4  	REFERENCES JEU (IdJeu);
+
+Table CONTENU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE CONTENU_POSSEDE
+  2  	ADD CONSTRAINT CONTENU_POSSEDE_ID_CONTENU_FK
+  3  	FOREIGN KEY (IdContenu)
+  4  	REFERENCES Contenu (IdContenu);
+
+Table CONTENU_POSSEDE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE CONTENU_POSSEDE
+  2  	ADD CONSTRAINT CONTENU_POSSEDE_NO_JOUEUR_FK
+  3  	FOREIGN KEY (NoJoueur)
+  4  	REFERENCES Joueur (NoJoueur);
+
+Table CONTENU_POSSEDE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES
+  2  	ADD CONSTRAINT SUCCES_FK
+  3  	FOREIGN KEY (IdContenu)
+  4  	REFERENCES CONTENU (IdContenu);
+
+Table SUCCES modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_CALCULE
+  2  	ADD CONSTRAINT SUCCES_CALCULE_FK
+  3  	FOREIGN KEY (IdSucces)
+  4  	REFERENCES SUCCES (IdSucces);
+
+Table SUCCES_CALCULE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_REALISE
+  2  	ADD CONSTRAINT SUCCES_REALISE_ID_SUCCES_FK
+  3  	FOREIGN KEY (IdSucces)
+  4  	REFERENCES SUCCES (IdSucces);
+
+Table SUCCES_REALISE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_REALISE
+  2  	ADD CONSTRAINT SUCCES_REALISE_CONTENU_FK
+  3  	FOREIGN KEY (IdContenu, NoJoueur)
+  4  	REFERENCES CONTENU_POSSEDE (IdContenu, NoJoueur);
+
+Table SUCCES_REALISE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_EN_COURS
+  2  	ADD CONSTRAINT SUCCES_EN_COURS_ID_SUCCES_FK
+  3  	FOREIGN KEY (IdSucces)
+  4  	REFERENCES SUCCES_CALCULE (IdSucces);
+
+Table SUCCES_EN_COURS modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_EN_COURS
+  2  	ADD CONSTRAINT SUCCES_EN_COURS_CONTENU_FK
+  3  	FOREIGN KEY (IdContenu, NoJoueur)
+  4  	REFERENCES CONTENU_POSSEDE (IdContenu, NoJoueur);
+
+Table SUCCES_EN_COURS modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE
+  2  	ADD CONSTRAINT PERIODE_FK
+  3  	FOREIGN KEY (CodeForfait)
+  4  	REFERENCES FORFAIT (Code);
+
+Table PERIODE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE_FORFAIT_JOUEUR
+  2  	ADD CONSTRAINT PERIODE_FORF_J_ID_PERIODE_FK
+  3  	FOREIGN KEY (IdPeriode)
+  4  	REFERENCES PERIODE (IdPeriode);
+
+Table PERIODE_FORFAIT_JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE_FORFAIT_JOUEUR
+  2  	ADD CONSTRAINT PERIODE_FORF_J_NO_JOUEUR_FK
+  3  	FOREIGN KEY (NoJoueur)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table PERIODE_FORFAIT_JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE ABONNEMENT_RESEAU
+  2  	ADD CONSTRAINT ABONNEMENT_CODE_RESEAU_FK
+  3  	FOREIGN KEY (CodeReseau)
+  4  	REFERENCES RESEAU (Code);
+
+Table ABONNEMENT_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE ABONNEMENT_RESEAU
+  2  	ADD CONSTRAINT ABONNEMENT_NO_JOUEUR_FK
+  3  	FOREIGN KEY (NoJoueur)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table ABONNEMENT_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_RESEAU
+  2  	ADD CONSTRAINT SUIVI_RESEAU_CODE_RESEAU_FK
+  3  	FOREIGN KEY (CodeReseau)
+  4  	REFERENCES RESEAU (Code);
+
+Table SUIVI_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_RESEAU
+  2  	ADD CONSTRAINT SUIVI_RESEAU_NO_JOUEUR_FK
+  3  	FOREIGN KEY (NoJoueur)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table SUIVI_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE AMI 
+  2  	ADD CONSTRAINT AMI_CODE_STATUT_FK
+  3  	FOREIGN KEY (CodeStatut)
+  4  	REFERENCES STATUT_AMITIE (CodeStatut);
+
+Table AMI modifié(e).
+
+SQL> 
+SQL> ALTER TABLE AMI
+  2  	ADD CONSTRAINT AMI_NO_JOUEUR_INVITANT_FK
+  3  	FOREIGN KEY (NoJoueurInvitant)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table AMI modifié(e).
+
+SQL> 
+SQL> ALTER TABLE AMI
+  2  	ADD CONSTRAINT AMI_NO_JOUEUR_INVITE_FK
+  3  	FOREIGN KEY (NoJoueurInvite)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table AMI modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_AMITIE
+  2  	ADD CONSTRAINT SUIVI_AMI_NO_J_INVITANT_FK
+  3  	FOREIGN KEY (NoJoueurInvitant)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table SUIVI_AMITIE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_AMITIE
+  2  	ADD CONSTRAINT SUIVI_AMI_NO_J_INVITE_FK
+  3  	FOREIGN KEY (NoJoueurInvite)
+  4  	REFERENCES JOUEUR (NoJoueur);
+
+Table SUIVI_AMITIE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_AMITIE
+  2  	ADD CONSTRAINT SUIVI_AMITIE_CODE_STATUT_FK
+  3  	FOREIGN KEY (CodeStatut)
+  4  	REFERENCES STATUT_AMITIE (CodeStatut);
+
+Table SUIVI_AMITIE modifié(e).
+
+SQL> 
+SQL> 
+SQL> REM Champs UNIQUE
+SQL> 
+SQL> ALTER TABLE JOUEUR
+  2  	ADD CONSTRAINT JOUEUR_UNIQUE UNIQUE (Courriel, Surnom);
+
+Table JOUEUR modifié(e).
+
+SQL> 
+SQL> 
+SQL> REM Listes des constraintes (CHECK CONSTRAINT)
+SQL> 
+SQL> ALTER TABLE CONTENU
+  2  	ADD CONSTRAINT CHECK_CONTENU_TYPE CHECK (
+  3  		TypeContenu IN ('J', 'D', 'O')
+  4  	);
+
+Table CONTENU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE JOUEUR
+  2  	ADD CONSTRAINT CHECK_JOUEUR_ACTIF CHECK (
+  3  		Actif IN ('1', '0')
+  4  	);
+
+Table JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE RESEAU
+  2  	ADD CONSTRAINT CHECK_RESEAU_ACTIF CHECK (
+  3  		Actif IN ('1', '0')
+  4  	);
+
+Table RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_RESEAU
+  2  	ADD CONSTRAINT CHECK_SUIVI_RESEAU_ACTION CHECK (
+  3  		Action IN ('CRE', 'SUP', 'ACT', 'DES', 'ABO', 'DSA')
+  4  	);
+
+Table SUIVI_RESEAU modifié(e).
+
+SQL> REM 'CREATION RESEAU', 'SUPPRESSION RESEAU', 
+SQL> REM 'ACTIVATION RESEAU', 'DESACTIVATION RESEAU', 
+SQL> REM 'ABONNEMENT JOUEUR', 'DESABONNEMENT JOUEUR'
+SQL> 
+SQL> ALTER TABLE SUCCES
+  2  	ADD CONSTRAINT CHECK_SUCCES_VALEUR CHECK (Valeur > 0);
+
+Table SUCCES modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_CALCULE
+  2  	ADD CONSTRAINT CHECK_SUCCES_C_MAX_REQUIS CHECK (MaximumRequis > 0);
+
+Table SUCCES_CALCULE modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUCCES_EN_COURS
+  2  	ADD CONSTRAINT CHECK_SUCCES_EN_COURS_COMPTEUR CHECK (Compteur > 0);
+
+Table SUCCES_EN_COURS modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE
+  2  	ADD CONSTRAINT CHECK_PERIODE_PRIX CHECK (Prix >= 0);
+
+Table PERIODE modifié(e).
+
+SQL> 
+SQL> 
+SQL> REM Valeurs par défaut
+SQL> 
+SQL> ALTER TABLE SUCCES_EN_COURS
+  2    MODIFY (Compteur DEFAULT 0);
+
+Table SUCCES_EN_COURS modifié(e).
+
+SQL> 
+SQL> ALTER TABLE PERIODE_FORFAIT_JOUEUR
+  2    MODIFY (DateAchat DEFAULT SysDate);
+
+Table PERIODE_FORFAIT_JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE JOUEUR
+  2    MODIFY (Actif DEFAULT '1');
+
+Table JOUEUR modifié(e).
+
+SQL> 
+SQL> ALTER TABLE RESEAU
+  2    MODIFY (Actif DEFAULT '1');
+
+Table RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE RESEAU
+  2    MODIFY (Actif DEFAULT '1');
+
+Table RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_RESEAU
+  2    MODIFY (Moment DEFAULT CURRENT_TIMESTAMP);
+
+Table SUIVI_RESEAU modifié(e).
+
+SQL> 
+SQL> ALTER TABLE SUIVI_AMITIE
+  2    MODIFY (Moment DEFAULT CURRENT_TIMESTAMP);
+
+Table SUIVI_AMITIE modifié(e).
+
+SQL> 
+SQL> 
+SQL> REM Séquences
+SQL> 
+SQL> CREATE SEQUENCE JEU_SEQ;
+
+Sequence JEU_SEQ créé(e).
+
+SQL> CREATE SEQUENCE CONTENU_SEQ;
+
+Sequence CONTENU_SEQ créé(e).
+
+SQL> CREATE SEQUENCE SUCCES_SEQ;
+
+Sequence SUCCES_SEQ créé(e).
+
+SQL> CREATE SEQUENCE PERIODE_SEQ;
+
+Sequence PERIODE_SEQ créé(e).
+
+SQL> CREATE SEQUENCE JOUEUR_SEQ;
+
+Sequence JOUEUR_SEQ créé(e).
+
+SQL> CREATE SEQUENCE SUIVI_AMITIE_SEQ;
+
+Sequence SUIVI_AMITIE_SEQ créé(e).
+
+SQL> CREATE SEQUENCE SUIVI_RESEAU_SEQ;
+
+Sequence SUIVI_RESEAU_SEQ créé(e).
+
+SQL> @creation_scripts.sql
+SQL> REM CREATION DES SCRIPTS
+SQL> 
+SQL> @scripts/creation_declencheurs.sql
+SQL> --------------------------------------------------------
+SQL> --  Fichier créé - lundi-octobre-07-2019   
+SQL> --------------------------------------------------------
+SQL> --------------------------------------------------------
+SQL> --  DDL for Trigger NO_AUTO_IDCONTENU
+SQL> --------------------------------------------------------
+SQL> ALTER SESSION SET PLSCOPE_SETTINGS = 'IDENTIFIERS:NONE';
+
+Session modifié(e).
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL>   CREATE OR REPLACE TRIGGER "NO_AUTO_IDCONTENU" 
+  2     before insert 
+  3     on "CONTENU"  
+  4     for each row 
+  5  begin  
+  6        select CONTENU_SEQ.nextval 
+  7        into :NEW."IDCONTENU" 
+  8        from SYS.dual; 
+  9  end;
+ 10  /
+
+Elément Trigger NO_AUTO_IDCONTENU compilé
+
+SQL> ALTER TRIGGER   "NO_AUTO_IDCONTENU"ENABLE;
+
+Trigger "NO_AUTO_IDCONTENU" modifié(e).
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Trigger NO_AUTO_IDJEU
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE OR REPLACE TRIGGER "NO_AUTO_IDJEU" 
+  2     before insert on "JEU" 
+  3     for each row 
+  4  begin  
+  5      select JEU_SEQ.nextval 
+  6      into :NEW."IDJEU" 
+  7      from dual; 
+  8  end;
+  9  /
+
+Elément Trigger NO_AUTO_IDJEU compilé
+
+SQL> ALTER TRIGGER "NO_AUTO_IDJEU" ENABLE;
+
+Trigger "NO_AUTO_IDJEU" modifié(e).
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Trigger NO_AUTO_IDPERIODE
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE OR REPLACE TRIGGER "NO_AUTO_IDPERIODE" 
+  2     before insert on "PERIODE" 
+  3     for each row 
+  4  begin  
+  5      select PERIODE_SEQ.nextval 
+  6      into :NEW."IDPERIODE" 
+  7      from dual; 
+  8  end;
+  9  /
+
+Elément Trigger NO_AUTO_IDPERIODE compilé
+
+SQL> ALTER TRIGGER "NO_AUTO_IDPERIODE" ENABLE;
+
+Trigger "NO_AUTO_IDPERIODE" modifié(e).
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Trigger NO_AUTO_IDSUCCES
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE OR REPLACE TRIGGER "NO_AUTO_IDSUCCES" 
+  2     before insert on "SUCCES" 
+  3     for each row 
+  4  begin  
+  5       select SUCCES_SEQ.nextval 
+  6       into :NEW."IDSUCCES" 
+  7       from dual; 
+  8  end;
+  9  /
+
+Elément Trigger NO_AUTO_IDSUCCES compilé
+
+SQL> ALTER TRIGGER "NO_AUTO_IDSUCCES" ENABLE;
+
+Trigger "NO_AUTO_IDSUCCES" modifié(e).
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Trigger NO_AUTO_IDSUIVI
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE OR REPLACE TRIGGER "NO_AUTO_IDSUIVI" 
+  2     before insert on "SUIVI_AMITIE" 
+  3     for each row 
+  4  begin  
+  5      select SUIVI_AMITIE_SEQ.nextval 
+  6      into :NEW."IDSUIVI" 
+  7      from dual; 
+  8  end;
+  9  /
+
+Elément Trigger NO_AUTO_IDSUIVI compilé
+
+SQL> ALTER TRIGGER "NO_AUTO_IDSUIVI" ENABLE;
+
+Trigger "NO_AUTO_IDSUIVI" modifié(e).
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Trigger NO_AUTO_IDSUIVIR
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE OR REPLACE TRIGGER "NO_AUTO_IDSUIVIR" 
+  2     before insert on "SUIVI_RESEAU" 
+  3     for each row 
+  4  begin 
+  5      select SUIVI_RESEAU_SEQ.nextval 
+  6      into :NEW."IDSUIVI" 
+  7      from dual; 
+  8  end;
+  9  /
+
+Elément Trigger NO_AUTO_IDSUIVIR compilé
+
+SQL> ALTER TRIGGER "NO_AUTO_IDSUIVIR" ENABLE;
+
+Trigger "NO_AUTO_IDSUIVIR" modifié(e).
+
+SQL> --------------------------------------------------------
+SQL> --  DDL for Trigger NO_AUTO_NOJOUEUR
+SQL> --------------------------------------------------------
+SQL> 
+SQL>   CREATE OR REPLACE TRIGGER "NO_AUTO_NOJOUEUR" 
+  2     before insert on "JOUEUR" 
+  3     for each row 
+  4  begin  
+  5       select JOUEUR_SEQ.nextval 
+  6       into :NEW."NOJOUEUR" 
+  7       from dual; 
+  8  end;
+  9  /
+
+Elément Trigger NO_AUTO_NOJOUEUR compilé
+
+SQL> ALTER TRIGGER "NO_AUTO_NOJOUEUR" ENABLE;
+
+Trigger "NO_AUTO_NOJOUEUR" modifié(e).
+
+SQL> 
+SQL> REM CREATION DES TRIGGERS
+SQL> 
+SQL> @declencheurs/sequences.sql
+
+Erreur commençant à la ligne: 111 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
+Dans la commande -
+@declencheurs/sequences.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/sequences.sql"
+SQL> 
+SQL> @declencheurs/nouveauSuccesEnCours.sql 
+
+Erreur commençant à la ligne: 113 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
+Dans la commande -
+@declencheurs/nouveauSuccesEnCours.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/nouveauSuccesEnCours.sql"
+SQL> @declencheurs/genre.sql 
+
+Erreur commençant à la ligne: 114 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
+Dans la commande -
+@declencheurs/genre.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/genre.sql"
+SQL> @declencheurs/suiviReseau.sql 
+
+Erreur commençant à la ligne: 115 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
+Dans la commande -
+@declencheurs/suiviReseau.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/suiviReseau.sql"
+SQL> @declencheurs/suiviAbonnementReseau.sql
+
+Erreur commençant à la ligne: 116 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
+Dans la commande -
+@declencheurs/suiviAbonnementReseau.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/suiviAbonnementReseau.sql"
+SQL> @declencheurs/suiviAmi.sql
+
+Erreur commençant à la ligne: 117 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
+Dans la commande -
+@declencheurs/suiviAmi.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/suiviAmi.sql"
+SQL> @scripts/creation_procedures.sql
+SQL> REM CREATION DES PROCEDURES
+SQL> 
+SQL> @procedures/ajoutForfait.sql
+SQL> CREATE OR REPLACE PROCEDURE AJOUTFORFAIT(code IN CHAR, nom IN VARCHAR2 DEFAULT 'Forfait', desc_param IN VARCHAR2, prix IN NUMBER) AS 
+  2      
+  3      bon_nom FORFAIT.NOM%TYPE;
+  4  
+  5  BEGIN
+  6  
+  7      IF nom = NULL THEN
+  8          bon_nom := 'Forfait';
+  9      ELSE
+ 10          bon_nom := nom;
+ 11      END IF;
+ 12      INSERT INTO FORFAIT VALUES(code, bon_nom, desc_param);
+ 13      INSERT INTO PERIODE(DATEDEBUT, DATEFIN, PRIX, CODEFORFAIT) VALUES(SYSDATE(), ADD_MONTHS(SYSDATE(), 12), prix, code);
+ 14  
+ 15  END AJOUTFORFAIT;
+
+Elément Procedure AJOUTFORFAIT compilé
+
+SQL> @procedures/prolongationForfait.sql
+SQL> CREATE OR REPLACE PROCEDURE PROLONGATIONFORFAIT(CODE IN CHAR, NBTOUCHES OUT INT) AS 
+  2  BEGIN
+  3      NBTOUCHES := 0;
+  4      update PERIODE_FORFAIT_JOUEUR 
+  5      set DATEACHAT = ADD_MONTHS(DATEACHAT,2)-- Ajout de deux mois à la date de fin de forfait
+  6      where IDPERIODE IN (SELECT IDPERIODE FROM PERIODE WHERE CODEFORFAIT = CODE) 
+  7      and  dateachat >= add_months(sysdate,-12);
+  8      IF SQL%FOUND THEN
+  9          NBTOUCHES := SQL%ROWCOUNT;
+ 10      END IF;
+ 11  END PROLONGATIONFORFAIT;
+
+Elément Procedure PROLONGATIONFORFAIT compilé
+
+SQL> @procedures/ajusterPromotion.sql
+
+Erreur commençant à la ligne: 5 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_procedures.sql
+Dans la commande -
+@procedures/ajusterPromotion.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "procedures/ajusterPromotion.sql"
+SQL> @procedures/suppressionJeu.sql
+SQL> CREATE OR REPLACE PROCEDURE suppressionJeu(etat_sortie OUT INT, nom_du_jeu IN JEU.NOM%TYPE) AS 
+  2  
+  3      nb_jeux INT;
+  4      id_jeu JEU.IDJEU%TYPE;
+  5  
+  6  BEGIN
+  7  
+  8      SELECT COUNT(*)
+  9      INTO nb_jeux
+ 10      FROM JEU
+ 11      WHERE NOM = nom_du_jeu;
+ 12  
+ 13      IF nb_jeux = 0 THEN
+ 14          etat_sortie := 1;
+ 15      ELSIF nb_jeux > 1 THEN
+ 16          etat_sortie := 2;
+ 17      ELSE
+ 18  
+ 19          SELECT IDJEU
+ 20          INTO id_jeu
+ 21          FROM JEU
+ 22          WHERE NOM = nom_du_jeu;
+ 23  
+ 24          COMMIT;
+ 25          SET TRANSACTION NAME 'supressions';
+ 26              DELETE
+ 27              FROM SUCCES_EN_COURS
+ 28              WHERE IDSUCCES IN (SELECT IDSUCCES FROM SUCCES WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu));
+ 29              DELETE
+ 30              FROM SUCCES_CALCULE
+ 31              WHERE IDSUCCES IN (SELECT IDSUCCES FROM SUCCES WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu));
+ 32              DELETE
+ 33              FROM SUCCES_REALISE
+ 34              WHERE IDSUCCES IN (SELECT IDSUCCES FROM SUCCES WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu));
+ 35              DELETE
+ 36              FROM SUCCES
+ 37              WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu);
+ 38              DELETE
+ 39              FROM CONTENU
+ 40              WHERE IDJEU = id_jeu;
+ 41              DELETE
+ 42              FROM JEU
+ 43              WHERE NOM = nom_du_jeu;
+ 44          COMMIT;
+ 45  
+ 46      END IF;
+ 47  EXCEPTION
+ 48      WHEN OTHERS THEN
+ 49          etat_sortie := 3;
+ 50          ROLLBACK;
+ 51  END suppressionJeu;
+
+Elément Procedure SUPPRESSIONJEU compilé
+
+SQL> @scripts/creation_fonctions.sql
+SQL> REM CREATION DES FONCTIONS
+SQL> 
+SQL> @fonctions/succesPlusRealise.sql
+
+Erreur commençant à la ligne: 3 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_fonctions.sql
+Dans la commande -
+@fonctions/succesPlusRealise.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "fonctions/succesPlusRealise.sql"
+SQL> @fonctions/validerGenre.sql
+
+Erreur commençant à la ligne: 4 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_fonctions.sql
+Dans la commande -
+@fonctions/validerGenre.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "fonctions/validerGenre.sql"
+SQL> @fonctions/joueurLePlusPopulaire.sql
+
+Erreur commençant à la ligne: 5 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_fonctions.sql
+Dans la commande -
+@fonctions/joueurLePlusPopulaire.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "fonctions/joueurLePlusPopulaire.sql"
+SQL> @fonctions/jeuLePlusPopulaire.sql
+
+Erreur commençant à la ligne: 6 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_fonctions.sql
+Dans la commande -
+@fonctions/jeuLePlusPopulaire.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "fonctions/jeuLePlusPopulaire.sql"
+SQL> @scripts/creation_vues.sql
+SQL> REM CREATION DES VUES
+SQL> 
+SQL> @vues/mesSucces.sql
+
+Erreur commençant à la ligne: 3 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_vues.sql
+Dans la commande -
+@vues/mesSucces.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "vues/mesSucces.sql"
+SQL> @vues/suivi.sql
+
+Erreur commençant à la ligne: 4 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_vues.sql
+Dans la commande -
+@vues/suivi.sql
+Rapport d'erreur -
+SP2-0310 : impossible d'ouvrir le fichier : "vues/suivi.sql"
+SQL> @creation_donnees.sql
+SQL> REM CREATION DES DONNÉES
+SQL> 
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom)
+  2  	VALUES ('bob@hotmail.com', 'BOB LE JOUEUR', NULL, 'Robert', 'Paquette');
+
+1 ligne inséré.
+
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+  2  	VALUES ('fred@outlook.com', 'Fred Y', NULL, NULL, NULL, 0);
+
+1 ligne inséré.
+
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+  2  	VALUES ('roger@gmail.com', 'Roger la menace', NULL, 'Roger', 'Tremblay', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+  2  	VALUES ('steve@hotmail.com', 'Steve le pirate', NULL, 'S', 'P', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+  2  	VALUES ('sylvie@outlook.com', 'SILL VI', NULL, NULL, NULL, 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO JOUEUR (Courriel, Surnom, Miniature, Nom, Prenom, Actif)
+  2  	VALUES ('barbie15@gmail.com', 'Tank Girl', NULL, 'Tank', NULL, 0);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO ESRB (Code, Description)
+  2  	VALUES ('E', 'Enfants et adultes');
+
+1 ligne inséré.
+
+SQL> INSERT INTO ESRB (Code, Description)
+  2  	VALUES ('T', 'Adolescents');
+
+1 ligne inséré.
+
+SQL> INSERT INTO ESRB (Code, Description)
+  2  	VALUES ('M', 'Jeunes adultes');
+
+1 ligne inséré.
+
+SQL> INSERT INTO ESRB (Code, Description)
+  2  	VALUES ('A', 'Adultes');
+
+1 ligne inséré.
+
+SQL> INSERT INTO ESRB (Code, Description)
+  2  	VALUES ('R', 'En attente de classement');
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('ACT', 'Action', 'ACT');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('HOR', 'Horreur', 'HOR');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('SPT', 'Sport', 'SPT');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('AVT', 'Aventure', 'ACT');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('HCK', 'Hack and Slash', 'ACT');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('SUR', 'Survie', 'HOR');
+
+1 ligne inséré.
+
+SQL> INSERT INTO GENRE (Code, Description, CodeGenreParent)
+  2  	VALUES ('COU', 'Course', 'SPT');
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO JEU (Nom, Description, CodeESRB, CodeGenre)
+  2  	VALUES ('TOMB RAIDER', 'Les aventures de Lara Croft', 'T', 'ACT');
+
+1 ligne inséré.
+
+SQL> INSERT INTO JEU (Nom, Description, CodeESRB, CodeGenre)
+  2  	VALUES ('Dying Light', 'Survivre dans un monde infesté de zombie. Bonne nuit!', 'M', 'HOR');
+
+1 ligne inséré.
+
+SQL> INSERT INTO JEU (Nom, Description, CodeESRB, CodeGenre)
+  2  	VALUES ('CANDY CRUSH', 'Le super jeu', 'T', 'HOR');
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO SOUS_GENRE_JEU (CodeSousGenre, IdJeu)
+  2  	VALUES ('AVT', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SOUS_GENRE_JEU (CodeSousGenre, IdJeu)
+  2  	VALUES ('SUR', 2);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+  2  	VALUES ('Les quêtes principales', 'Les aventures de Lara Croft en Amazonie', to_date('2018-02-03'), 'J', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+  2  	VALUES ('La quête secondaire du dragon', 'Les aventures de Lara Croft en Chine', to_date('2018-06-23'), 'D', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+  2  	VALUES ('La quête secondaire de l''aigle', 'Les aventures de Lara Croft dans les montagnes', to_date('2018-11-11'),'D', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+  2  	VALUES ('Ensemble d''exploration', 'Équipements supplémentaires pour l''aventure', to_date('2018-12-01'), 'O', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+  2  	VALUES ('Chicago', 'La ville infestée de Chicago', to_date('2018-09-09'), 'J', 2);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU (Nom, Description, DateSortie, TypeContenu, IdJeu)
+  2  	VALUES ('Niveau1', 'Les 10 premiers niveaux', to_date('2019-01-24'), 'J', 3);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (1, 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (2, 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (3, 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (4, 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (1, 2);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (5, 2);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (1, 3);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (2, 3);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (3, 3);
+
+1 ligne inséré.
+
+SQL> INSERT INTO CONTENU_POSSEDE (IdContenu, NoJoueur)
+  2  	VALUES (4, 3);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Survivre', 'Vous avez réussi à traverser la foret amazonienne', 50, 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Délivrance', 'Vous avez réussi à sauver Kevin', 10, 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Tenace', 'Rependre le combat après une raclée', 10, 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Rusé', 'Résoudre l''énigme du dragon', 20, 2);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Agile', 'Réussir un vol plané des hautes falaises', 20, 3);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Survivant', 'Survivre la première nuit dans la ville', 50, 5);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Mission_1', 'Vaincre le gros méchant zombie à la fin de la mission', 10, 5);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Herboriste', 'Recuperer des plantes médécinales', 5, 5);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES (Titre, Description, Valeur, IdContenu)
+  2  	VALUES ('Super bonbonnier', 'Reussir 5X un tableau en 10 secondes', 5, 6);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO SUCCES_CALCULE (IdSucces, MaximumRequis)
+  2  	VALUES (8, 10);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES_CALCULE (IdSucces, MaximumRequis)
+  2  	VALUES (9, 5);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+  2  	VALUES (1, 1, 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+  2  	VALUES (1, 1, 2);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+  2  	VALUES (1, 1, 3);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+  2  	VALUES (1, 2, 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+  2  	VALUES (5, 2, 6);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO SUCCES_EN_COURS (IdContenu, NoJoueur, IdSucces, Compteur)
+  2  	VALUES (5, 2, 8, 7);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO FORFAIT (Code, Nom, Description)
+  2  	VALUES ('GOLD1', 'XBox Gold' , 'Abonnement pour jouer en ligne et avoir des promotions');
+
+1 ligne inséré.
+
+SQL> INSERT INTO FORFAIT (Code, Nom, Description)
+  2  	VALUES ('PASS1', 'XBox Game Pass' , 'Abonnement pour 100 jeux par mois');
+
+1 ligne inséré.
+
+SQL> INSERT INTO FORFAIT (Code, Nom, Description)
+  2  	VALUES ('STAND', NULL , NULL);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+  2  	VALUES (to_date('2019-01-11'), to_date('2019-12-31'), 80, 'GOLD1');
+
+1 ligne inséré.
+
+SQL> INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+  2  	VALUES (to_date('2018-01-11'), to_date('2018-12-31'), 90, 'GOLD1');
+
+1 ligne inséré.
+
+SQL> INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+  2  	VALUES (to_date('2019-06-11'), to_date('2019-10-31'), 50, 'PASS1');
+
+1 ligne inséré.
+
+SQL> INSERT INTO PERIODE (DateDebut, DateFin, Prix, CodeForfait)
+  2  	VALUES (to_date('2000-01-01'), to_date('2030-12-31'), 0, 'STAND');
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (1, 1, to_date('2019-06-06'));
+
+1 ligne inséré.
+
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (1, 2, to_date('2018-06-06'));
+
+1 ligne inséré.
+
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (1, 3, to_date('2019-10-06'));
+
+1 ligne inséré.
+
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (1, 4, to_date('2015-02-26'));
+
+1 ligne inséré.
+
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (2, 1, to_date('2019-04-04'));
+
+1 ligne inséré.
+
+SQL> INSERT INTO PERIODE_FORFAIT_JOUEUR (IdPeriode, NoJoueur, DateAchat)
+  2  	VALUES (3, 1, to_date('2019-05-05'));
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO RESEAU (Code, Nom, Description)
+  2  	VALUES ('LACKEN', 'Les amis du Lac Kénogami', 'Bienvenue à tous!');
+
+1 ligne inséré.
+
+SQL> INSERT INTO RESEAU (Code, Nom, Description, Actif)
+  2  	VALUES ('UQACBD', 'Le reseau des etudiants du 157', 'Tous les etudiants qui travaillent actuellement sur le PLSQL', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO RESEAU (Code, Nom, Description, Actif)
+  2  	VALUES ('FRANCO', 'Le reseau des francophones', 'Ici, pas de Bienvenue-Hi!', 0);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('LACKEN', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('UQACBD', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('FRANCO', 1);
+
+1 ligne inséré.
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('FRANCO', 2);
+
+1 ligne inséré.
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('FRANCO', 3);
+
+1 ligne inséré.
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('UQACBD', 4);
+
+1 ligne inséré.
+
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  	VALUES ('UQACBD', 5);
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO STATUT_AMITIE (CodeStatut, Description)
+  2  	VALUES ('NOU', 'Nouveau ami');
+
+1 ligne inséré.
+
+SQL> INSERT INTO STATUT_AMITIE (CodeStatut, Description)
+  2  	VALUES ('FIN', 'Fin de l''amitié');
+
+1 ligne inséré.
+
+SQL> INSERT INTO STATUT_AMITIE (CodeStatut, Description)
+  2  	VALUES ('REL', 'Rel. distante seulement');
+
+1 ligne inséré.
+
+SQL> INSERT INTO STATUT_AMITIE (CodeStatut, Description)
+  2  	VALUES ('PRO', 'Rel. professionnelle');
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (1, 2, to_date('2019-06-08'), 'NOU');
+
+1 ligne inséré.
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (1, 6, to_date('2019-06-10'), 'FIN');
+
+1 ligne inséré.
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (2, 3, to_date('2019-01-01'), 'NOU');
+
+1 ligne inséré.
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (2, 4, to_date('2019-02-02'), 'NOU');
+
+1 ligne inséré.
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (2, 5, to_date('2019-03-03'), 'PRO');
+
+1 ligne inséré.
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (6, 2, to_date('2019-04-04'), 'REL');
+
+1 ligne inséré.
+
+SQL> INSERT INTO AMI (NoJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  	VALUES (3, 6, to_date('2019-06-04'), 'NOU');
+
+1 ligne inséré.
+
+SQL> 
+SQL> spool off
