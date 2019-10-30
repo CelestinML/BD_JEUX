@@ -1,19 +1,10 @@
 CREATE OR REPLACE TRIGGER NOUVEAUSUCCESENCOURS_TRG 
-AFTER INSERT ON SUCCES_EN_COURS 
+BEFORE INSERT ON SUCCES_EN_COURS 
 FOR EACH ROW
-DECLARE
-    CURSOR succes_realises IS
-    SELECT IDSUCCES
-    FROM SUCCES_REALISE
-    WHERE NOJOUEUR = :NEW.NOJOUEUR
-    AND IDCONTENU = :NEW.IDCONTENU;
 BEGIN
-    OPEN succes_realises;
-    IF (:NEW.IDSUCCES IN succes_realises) THEN
-        DELETE FROM SUCCES_EN_COURS
-        WHERE IDCONTENU = :NEW.IDCONTENU
-        AND NOJOUEUR = :NEW.NOJOUEUR
-        AND IDSUCCES = :NEW.IDSUCCES;
+    --On verifie si le succes en court d'insertion a ete realise par ce joueur dans ce jeu
+    IF (:NEW.IDSUCCES IN (SELECT IDSUCCES FROM SUCCES_REALISE WHERE NOJOUEUR = :NEW.NOJOUEUR AND IDCONTENU = :NEW.IDCONTENU)) THEN
+        raise_application_error(-1000, 'Succes deja realise.');
     END IF;
-    CLOSE succes_realises;
+    --Si le succès n'est pas dans les succes deja realises par ce joueur dans ce jeu, rien ne se passe et l'insertion se termine correctement
 END;

@@ -3,12 +3,14 @@ CREATE OR REPLACE FUNCTION SUCCESPLUSREALISE(nb_realisations_max OUT INT) RETURN
     CURSOR id_succes IS
     SELECT IDSUCCES FROM SUCCES;
     
-    id_succes_actuel NUMBER(38,0);
+    id_succes_actuel SUCCES.IDSUCCES%TYPE;
     
-    succes_plus_realise VARCHAR2(50);
+    succes_plus_realise SUCCES.TITRE%TYPE;
     nb_realisations INT;
     
 BEGIN
+
+    OPEN id_succes;
 
     nb_realisations_max := 0;
     
@@ -24,6 +26,8 @@ BEGIN
             WHERE IDSUCCES = id_succes_actuel;
         END IF;
     END LOOP;
+    
+    CLOSE id_succes;
     
     RETURN succes_plus_realise;
     
