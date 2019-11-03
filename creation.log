@@ -896,12 +896,24 @@ Rapport d'erreur -
 SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/sequences.sql"
 SQL> 
 SQL> @declencheurs/nouveauSuccesEnCours.sql 
+SQL> CREATE OR REPLACE TRIGGER NOUVEAUSUCCESENCOURS_TRG 
+  2  BEFORE INSERT ON SUCCES_EN_COURS 
+  3  FOR EACH ROW
+  4  BEGIN
+  5      --On verifie si le succes en court d'insertion a ete realise par ce joueur dans ce jeu
+  6      IF (:NEW.IDSUCCES IN (SELECT IDSUCCES FROM SUCCES_REALISE WHERE NOJOUEUR = :NEW.NOJOUEUR AND IDCONTENU = :NEW.IDCONTENU)) THEN
+  7          raise_application_error(-1000, 'Succes deja realise.');
+  8      END IF;
+  9      --Si le succès n'est pas dans les succes deja realises par ce joueur dans ce jeu, rien ne se passe et l'insertion se termine correctement
+ 10  END;
 
-Erreur commençant à la ligne: 113 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
-Dans la commande -
-@declencheurs/nouveauSuccesEnCours.sql
-Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/nouveauSuccesEnCours.sql"
+Elément Trigger NOUVEAUSUCCESENCOURS_TRG compilé
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+3/5       PL/SQL: Statement ignored
+3/26      PLS-00405: subquery not allowed in this context
+Erreurs : consulter le journal du compilateur
 SQL> @declencheurs/genre.sql 
 
 Erreur commençant à la ligne: 114 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
@@ -910,37 +922,72 @@ Dans la commande -
 Rapport d'erreur -
 SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/genre.sql"
 SQL> @declencheurs/suiviReseau.sql 
+SQL> CREATE OR REPLACE TRIGGER Suivi_Reseau_TRG
+  2      AFTER INSERT OR UPDATE
+  3      ON RESEAU
+  4      FOR EACH ROW
+  5  BEGIN
+  6      IF INSERTING THEN
+  7          INSERT INTO SUIVI_RESEAU(CODERESEAU, DATESUIVI, ACTION)
+  8          VALUES(:NEW.CODE, SYSDATE(), 'CRE');
+  9      ELSIF UPDATING THEN
+ 10          IF (:NEW.ACTIF = '1') THEN
+ 11              INSERT INTO SUIVI_RESEAU(CODERESEAU, DATESUIVI, ACTION)
+ 12              VALUES(:NEW.CODE, SYSDATE(), 'ACT');
+ 13          ELSE
+ 14              INSERT INTO SUIVI_RESEAU(CODERESEAU, DATESUIVI, ACTION)
+ 15              VALUES(:NEW.CODE, SYSDATE(), 'DES');
+ 16          END IF;
+ 17      END IF;
+ 18  END;
 
-Erreur commençant à la ligne: 115 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
-Dans la commande -
-@declencheurs/suiviReseau.sql
-Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/suiviReseau.sql"
+Elément Trigger SUIVI_RESEAU_TRG compilé
+
 SQL> @declencheurs/suiviAbonnementReseau.sql
+SQL> CREATE OR REPLACE TRIGGER Suivi_Abonnement_Reseau_TRG
+  2      AFTER INSERT OR DELETE
+  3      ON ABONNEMENT_RESEAU
+  4      FOR EACH ROW
+  5  BEGIN
+  6      IF INSERTING THEN
+  7          INSERT INTO SUIVI_RESEAU(CODERESEAU, DATESUIVI, ACTION, NOJOUEUR)
+  8          VALUES(:NEW.CODERESEAU, SYSDATE(), 'ABO', :NEW.NOJOUEUR);
+  9      ELSIF DELETING THEN
+ 10          INSERT INTO SUIVI_RESEAU(CODERESEAU, DATESUIVI, ACTION, NOJOUEUR)
+ 11          VALUES(:OLD.CODERESEAU, SYSDATE(), 'DSA', :OLD.NOJOUEUR);
+ 12      END IF;
+ 13  END;
 
-Erreur commençant à la ligne: 116 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
-Dans la commande -
-@declencheurs/suiviAbonnementReseau.sql
-Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/suiviAbonnementReseau.sql"
+Elément Trigger SUIVI_ABONNEMENT_RESEAU_TRG compilé
+
 SQL> @declencheurs/suiviAmi.sql
+SQL> CREATE OR REPLACE TRIGGER Suivi_Ami_TRG
+  2      AFTER INSERT OR DELETE OR UPDATE
+  3      ON AMI
+  4      FOR EACH ROW
+  5  BEGIN
+  6      IF INSERTING OR UPDATING THEN
+  7          INSERT INTO SUIVI_AMITIE(NOJOUEURINVITANT, NOJOUEURINVITE, DATESUIVI, CODESTATUT)
+  8          VALUES(:NEW.NOJOUEURINVITANT, :NEW.NOJOUEURINVITE, SYSDATE(), :NEW.CODESTATUT);
+  9      ELSIF DELETING THEN
+ 10          INSERT INTO SUIVI_AMITIE(NOJOUEURINVITANT, NOJOUEURINVITE, DATESUIVI, CODESTATUT)
+ 11          VALUES(:OLD.NOJOUEURINVITANT, :OLD.NOJOUEURINVITE, SYSDATE(), :OLD.CODESTATUT);
+ 12      END IF;
+ 13  END;
 
-Erreur commençant à la ligne: 117 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
-Dans la commande -
-@declencheurs/suiviAmi.sql
-Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/suiviAmi.sql"
+Elément Trigger SUIVI_AMI_TRG compilé
+
 SQL> @scripts/creation_procedures.sql
 SQL> REM CREATION DES PROCEDURES
 SQL> 
 SQL> @procedures/ajoutForfait.sql
-SQL> CREATE OR REPLACE PROCEDURE AJOUTFORFAIT(code IN CHAR, nom IN VARCHAR2 DEFAULT 'Forfait', desc_param IN VARCHAR2, prix IN NUMBER) AS 
+SQL> CREATE OR REPLACE PROCEDURE AJOUTFORFAIT(code IN CHAR, nom IN VARCHAR2, desc_param IN VARCHAR2, prix IN NUMBER) AS 
   2      
   3      bon_nom FORFAIT.NOM%TYPE;
   4  
   5  BEGIN
   6  
-  7      IF nom = NULL THEN
+  7      IF nom IS NULL THEN
   8          bon_nom := 'Forfait';
   9      ELSE
  10          bon_nom := nom;
@@ -1033,33 +1080,130 @@ SQL> @scripts/creation_fonctions.sql
 SQL> REM CREATION DES FONCTIONS
 SQL> 
 SQL> @fonctions/succesPlusRealise.sql
+SQL> CREATE OR REPLACE FUNCTION succesPlusRealise RETURN VARCHAR2 AS 
+  2  
+  3      id_succes_plus_realise SUCCES.IDSUCCES%TYPE;
+  4      succes_plus_realise SUCCES.TITRE%TYPE;
+  5  
+  6  BEGIN
+  7  
+  8      SELECT IDSUCCES
+  9      INTO id_succes_plus_realise
+ 10      FROM (SELECT IDSUCCES, COUNT(*) as nb FROM SUCCES_REALISE GROUP BY IDSUCCES ORDER BY nb)
+ 11      WHERE rownum = 1;
+ 12  
+ 13      SELECT TITRE
+ 14      INTO succes_plus_realise
+ 15      FROM SUCCES
+ 16      WHERE IDSUCCES = id_succes_plus_realise;
+ 17  
+ 18      RETURN succes_plus_realise;
+ 19  
+ 20  END succesPlusRealise;
 
-Erreur commençant à la ligne: 3 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_fonctions.sql
-Dans la commande -
-@fonctions/succesPlusRealise.sql
-Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "fonctions/succesPlusRealise.sql"
+Elément Function SUCCESPLUSREALISE compilé
+
 SQL> @fonctions/validerGenre.sql
+SQL> CREATE OR REPLACE FUNCTION VALIDERGENRE(code_du_genre IN CHAR) RETURN CHAR AS 
+  2  
+  3  	code_parent GENRE.CODE%TYPE;
+  4      code_a_retourner code_parent%TYPE;
+  5  
+  6  BEGIN 
+  7  
+  8  	SELECT CODEGENREPARENT
+  9  	INTO code_parent
+ 10      FROM GENRE
+ 11      WHERE CODE = code_du_genre;
+ 12      IF code_parent = code_du_genre THEN
+ 13          code_a_retourner := code_du_genre;
+ 14      ELSE
+ 15          code_a_retourner := code_parent;
+ 16      END IF;
+ 17  
+ 18      --Si le genre est un genre parent, alors son code parent est lui-meme, donc on pourrait 
+ 19      --retourner directement le code parent, mais ce code suit precisement la consigne.
+ 20  
+ 21  	RETURN code_a_retourner;
+ 22  
+ 23  END VALIDERGENRE;
 
-Erreur commençant à la ligne: 4 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_fonctions.sql
-Dans la commande -
-@fonctions/validerGenre.sql
-Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "fonctions/validerGenre.sql"
+Elément Function VALIDERGENRE compilé
+
 SQL> @fonctions/joueurLePlusPopulaire.sql
+SQL> CREATE OR REPLACE FUNCTION joueurLePlusPopulaire RETURN VARCHAR2 AS
+  2  
+  3  	CURSOR joueurs_actifs IS
+  4  	SELECT NOJOUEUR
+  5  	FROM JOUEUR
+  6  	WHERE ACTIF = '1';
+  7  
+  8  	no_joueur_actuel JOUEUR.NOJOUEUR%TYPE;
+  9  	joueur_plus_populaire JOUEUR.SURNOM%TYPE;
+ 10  	nb_max_amis INT;
+ 11  	nb_actuel_amis INT;
+ 12  
+ 13  BEGIN
+ 14  
+ 15  	nb_max_amis := 0;
+ 16      OPEN joueurs_actifs;
+ 17  	FOR no_joueur_actuel IN joueurs_actifs LOOP
+ 18  		SELECT COUNT(*)
+ 19  		INTO nb_actuel_amis
+ 20  		FROM AMI
+ 21  		WHERE (NOJOUEURINVITANT = no_joueur_actuel)
+ 22          OR (NOJOUEURINVITE = no_joueur_actuel);
+ 23  		IF nb_actuel_amis > nb_max_amis THEN
+ 24  			nb_max_amis := nb_actuel_amis;
+ 25  			SELECT SURNOM
+ 26  			INTO joueur_plus_populaire
+ 27  			FROM JOUEUR
+ 28  			WHERE (NOJOUEUR = no_joueur_actuel);
+ 29  		END IF;
+ 30  	END LOOP;
+ 31      CLOSE joueurs_actifs;
+ 32  
+ 33  	RETURN joueur_plus_populaire;
+ 34  
+ 35  END joueurLePlusPopulaire;
 
-Erreur commençant à la ligne: 5 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_fonctions.sql
-Dans la commande -
-@fonctions/joueurLePlusPopulaire.sql
-Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "fonctions/joueurLePlusPopulaire.sql"
+Elément Function JOUEURLEPLUSPOPULAIRE compilé
+
+LINE/COL  ERROR
+--------- -------------------------------------------------------------
+21/29     PLS-00382: expression is of wrong type
+22/30     PLS-00382: expression is of wrong type
+28/22     PLS-00382: expression is of wrong type
+Erreurs : consulter le journal du compilateur
 SQL> @fonctions/jeuLePlusPopulaire.sql
+SQL> CREATE OR REPLACE FUNCTION jeuLePlusPopulaire(code_esrb IN CHAR) RETURN VARCHAR2 AS
+  2  
+  3  	nom_jeu_plus_populaire JEU.NOM%TYPE;
+  4  
+  5  BEGIN
+  6  	SELECT NOM
+  7      INTO nom_jeu_plus_populaire
+  8      FROM JEU
+  9      WHERE IDJEU =
+ 10      (SELECT IDJEU
+ 11      FROM CONTENU
+ 12      WHERE IDCONTENU =
+ 13      (SELECT IDCONTENU
+ 14      FROM (SELECT IDCONTENU, COUNT(*) as nb
+ 15      FROM CONTENU_POSSEDE
+ 16      WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU IN (SELECT IDJEU FROM JEU WHERE CODEESRB = code_esrb) AND TYPECONTENU = 'J')
+ 17      AND NOJOUEUR IN (SELECT NOJOUEUR FROM JOUEUR WHERE ACTIF = '1')
+ 18      AND NOJOUEUR IN (SELECT NOJOUEUR FROM SUCCES_REALISE WHERE IDCONTENU = IDCONTENU)
+ 19      GROUP BY IDCONTENU
+ 20      ORDER BY nb)
+ 21      WHERE rownum = 1));
+ 22  
+ 23  	RETURN nom_jeu_plus_populaire;
+ 24  
+ 25  END jeuLePlusPopulaire;
 
-Erreur commençant à la ligne: 6 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_fonctions.sql
-Dans la commande -
-@fonctions/jeuLePlusPopulaire.sql
-Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "fonctions/jeuLePlusPopulaire.sql"
+Elément Function JEULEPLUSPOPULAIRE compilé
+
 SQL> @scripts/creation_vues.sql
 SQL> REM CREATION DES VUES
 SQL> 
@@ -1071,12 +1215,38 @@ Dans la commande -
 Rapport d'erreur -
 SP2-0310 : impossible d'ouvrir le fichier : "vues/mesSucces.sql"
 SQL> @vues/suivi.sql
+SQL> CREATE VIEW suiviReseau AS
+  2     SELECT S.MOMENT, S.ACTION, S.CODERESEAU, R.NOM FROM RESEAU R INNER JOIN SUIVI_RESEAU S
+  3     ON R.CODE = S.CODERESEAU
+  4     WHERE S.NOJOUEUR = NULL
+  5     ORDER BY S.MOMENT ASC;
 
-Erreur commençant à la ligne: 4 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_vues.sql
+View SUIVIRESEAU créé(e).
+
+SQL> 
+SQL> CREATE VIEW suiviReseauJoueur AS
+  2     SELECT S.MOMENT, S.ACTION, S.CODERESEAU, J.SURNOM FROM JOUEUR J INNER JOIN SUIVI_RESEAU S
+  3     ON J.NOJOUEUR = S.NOJOUEUR
+  4     WHERE S.NOJOUEUR != NULL
+  5     ORDER BY S.MOMENT ASC;
+
+View SUIVIRESEAUJOUEUR créé(e).
+
+SQL> 
+SQL> CREATE VIEW suiviAmitieInvitation AS
+  2     SELECT S.MOMENT, J.SURNOM, J.NOJOUEUR, S.NOJOUEURINVITE, S.DATESUIVI, S.CODESTATUT FROM JOUEUR J INNER JOIN SUIVI_AMITIE S
+  3     ON J.NOJOUEUR = S.NOJOUEURINVITANT;
+
+Erreur commençant à la ligne: 13 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\vues\suivi.sql
 Dans la commande -
-@vues/suivi.sql
+CREATE VIEW suiviAmitieInvitation AS
+   SELECT S.MOMENT, J.SURNOM, J.NOJOUEUR, S.NOJOUEURINVITE, S.DATESUIVI, S.CODESTATUT FROM JOUEUR J INNER JOIN SUIVI_AMITIE S
+   ON J.NOJOUEUR = S.NOJOUEURINVITANT
 Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "vues/suivi.sql"
+ORA-00955: ce nom d'objet existe déjà
+00955. 00000 -  "name is already used by an existing object"
+*Cause:    
+*Action:
 SQL> @creation_donnees.sql
 SQL> REM CREATION DES DONNÉES
 SQL> 
@@ -1368,8 +1538,19 @@ SQL>
 SQL> INSERT INTO SUCCES_EN_COURS (IdContenu, NoJoueur, IdSucces, Compteur)
   2  	VALUES (5, 2, 8, 7);
 
-1 ligne inséré.
-
+Erreur commençant à la ligne: 123 Fichier @ file:/C:/Users/celes/Desktop/UQAC/Oracle/BD_JEUX/creation_donnees.sql
+Dans la commande -
+INSERT INTO SUCCES_EN_COURS (IdContenu, NoJoueur, IdSucces, Compteur)
+	VALUES (5, 2, 8, 7)
+Erreur à la ligne de commande: 123 Colonne: 13 Fichier @ file:/C:/Users/celes/Desktop/UQAC/Oracle/BD_JEUX/creation_donnees.sql
+Rapport d'erreur -
+Erreur SQL : ORA-04098: Déclencheur  'ORA8TRD157_42.NOUVEAUSUCCESENCOURS_TRG' non valide. Echec de la revalidation
+04098. 00000 -  "trigger '%s.%s' is invalid and failed re-validation"
+*Cause:    A trigger was attempted to be retrieved for execution and was
+           found to be invalid.  This also means that compilation/authorization
+           failed for the trigger.
+*Action:   Options are to resolve the compilation/authorization errors,
+           disable the trigger, or drop the trigger.
 SQL> 
 SQL> INSERT INTO FORFAIT (Code, Nom, Description)
   2  	VALUES ('GOLD1', 'XBox Gold' , 'Abonnement pour jouer en ligne et avoir des promotions');
