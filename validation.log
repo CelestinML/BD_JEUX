@@ -1,0 +1,689 @@
+SQL> 
+SQL> @validation/validation_vues.sql
+SQL> REM VALIDATION DES VUES
+SQL> 
+SQL> SELECT * FROM mesSucces WHERE NoJoueur = 2;
+
+TITRE                                              DESCRIPTION                                                                                                                                                                                                                                                          VALEUR   NOJOUEUR
+-------------------------------------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------- ----------
+Survivre                                           Vous avez réussi à traverser la foret amazonienne                                                                                                                                                                                                                        50          2
+Survivant                                          Survivre la première nuit dans la ville                                                                                                                                                                                                                                  50          2
+
+SQL> 
+SQL> SELECT * FROM suiviReseau;
+
+MOMENT                      ACT CODERE NOM                                               
+--------------------------- --- ------ --------------------------------------------------
+11/11/19 02:37:04,287464000 CRE LACKEN Les amis du Lac Kénogami                          
+11/11/19 02:37:04,287464000 CRE LACKEN Le reseau des etudiants du 157                    
+11/11/19 02:37:04,287464000 CRE LACKEN Le reseau des francophones                        
+11/11/19 02:37:04,373448000 CRE UQACBD Les amis du Lac Kénogami                          
+11/11/19 02:37:04,373448000 CRE UQACBD Le reseau des etudiants du 157                    
+11/11/19 02:37:04,373448000 CRE UQACBD Le reseau des francophones                        
+11/11/19 02:37:04,449986000 CRE FRANCO Les amis du Lac Kénogami                          
+11/11/19 02:37:04,449986000 CRE FRANCO Le reseau des etudiants du 157                    
+11/11/19 02:37:04,449986000 CRE FRANCO Le reseau des francophones                        
+
+9 lignes sélectionnées. 
+
+SQL> 
+SQL> SELECT * FROM suiviReseauJoueur;
+
+MOMENT                      ACT CODERE SURNOM                                            
+--------------------------- --- ------ --------------------------------------------------
+11/11/19 02:37:04,511934000 ABO LACKEN BOB LE JOUEUR                                     
+11/11/19 02:37:04,587323000 ABO UQACBD BOB LE JOUEUR                                     
+11/11/19 02:37:04,648156000 ABO FRANCO BOB LE JOUEUR                                     
+11/11/19 02:37:04,702313000 ABO FRANCO Fred Y                                            
+11/11/19 02:37:04,759885000 ABO FRANCO Roger la menace                                   
+11/11/19 02:37:04,826167000 ABO UQACBD Steve le pirate                                   
+11/11/19 02:37:04,902482000 ABO UQACBD SILL VI                                           
+
+7 lignes sélectionnées. 
+
+SQL> 
+SQL> SELECT * FROM suiviAmitieInvitation;
+
+MOMENT                      SURNOM                                               NOJOUEUR NOJOUEURINVITE DATESUIVI  COD
+--------------------------- -------------------------------------------------- ---------- -------------- ---------- ---
+11/11/19 02:37:05,236861000 BOB LE JOUEUR                                               1              2 2019/11/11 NOU
+11/11/19 02:37:05,290517000 BOB LE JOUEUR                                               1              6 2019/11/11 FIN
+11/11/19 02:37:05,346433000 Fred Y                                                      2              3 2019/11/11 NOU
+11/11/19 02:37:05,406043000 Fred Y                                                      2              4 2019/11/11 NOU
+11/11/19 02:37:05,463726000 Fred Y                                                      2              5 2019/11/11 PRO
+11/11/19 02:37:05,526991000 Tank Girl                                                   6              2 2019/11/11 REL
+11/11/19 02:37:05,584833000 Roger la menace                                             3              6 2019/11/11 NOU
+
+7 lignes sélectionnées. 
+
+SQL> @validation/validation_fonctions.sql
+SQL> REM VALIDATION DES FONCTIONS
+SQL> 
+SQL> SET SERVEROUTPUT ON
+SQL> SET ECHO ON
+SQL> 
+SQL> 
+SQL> 
+SQL> REM ------ joueurLePlusPopulaire
+SQL> 
+SQL> SELECT joueurLePlusPopulaire FROM DUAL;
+
+JOUEURLEPLUSPOPULAIRE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BOB LE JOUEUR
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> REM ------ jeuLePlusPopulaire
+SQL> 
+SQL> DECLARE
+  2  	CodeESRB	CHAR(1);
+  3  	Nom			VARCHAR2(100);
+  4  BEGIN
+  5   	CodeESRB := 'T';
+  6  	SELECT jeuLePlusPopulaire(CodeESRB) INTO Nom FROM DUAL;
+  7  	dbms_output.put_line('Nom : ' || Nom);
+  8  END; 
+  9  /
+Nom : TOMB RAIDER
+
+
+Procédure PL/SQL terminée.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> REM ------ succesPlusRealise
+SQL> 
+SQL> DECLARE
+  2      titreSucces VARCHAR2(50);
+  3  BEGIN
+  4  	SELECT succesPlusRealise() INTO titreSucces FROM DUAL;
+  5  	dbms_output.put_line('titreSucces : ' || titreSucces);
+  6  END; 
+  7  /
+titreSucces : Survivant
+
+
+Procédure PL/SQL terminée.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> REM ------ validerGenre
+SQL> 
+SQL> DECLARE
+  2      genreRecherche CHAR(3);
+  3      genreResultat CHAR(3);
+  4  BEGIN
+  5      -- TEST #1 : Le genre recherche est un genre
+  6      genreRecherche := 'HOR';
+  7  	SELECT validerGenre(genreRecherche) INTO genreResultat FROM DUAL;
+  8  	dbms_output.put_line('genreRecherche : ' || genreRecherche);
+  9  	dbms_output.put_line('genreResultat : ' || genreResultat);
+ 10  
+ 11      -- TEST #2 : Le genre recherche est un sous genre
+ 12      genreRecherche := 'HCK';
+ 13  	SELECT validerGenre(genreRecherche) INTO genreResultat FROM DUAL;
+ 14  	dbms_output.put_line('genreRecherche : ' || genreRecherche);
+ 15  	dbms_output.put_line('genreResultat : ' || genreResultat);
+ 16  END; 
+ 17  /
+genreRecherche : HOR
+genreResultat : HOR
+genreRecherche : HCK
+genreResultat : ACT
+
+
+Procédure PL/SQL terminée.
+
+SQL> @validation/validation_declencheurs.sql
+SQL> REM VALIDATION DES DECLENCHEURS
+SQL> 
+SQL> 
+SQL> REM ------ Validation des sequences
+SQL> 
+SQL> SELECT JEU_SEQ.NEXTVAL FROM DUAL;
+
+   NEXTVAL
+----------
+         4
+
+SQL> SELECT CONTENU_SEQ.NEXTVAL FROM DUAL;
+
+   NEXTVAL
+----------
+         7
+
+SQL> SELECT SUCCES_SEQ.NEXTVAL FROM DUAL;
+
+   NEXTVAL
+----------
+        10
+
+SQL> SELECT PERIODE_SEQ.NEXTVAL FROM DUAL;
+
+   NEXTVAL
+----------
+         5
+
+SQL> SELECT JOUEUR_SEQ.NEXTVAL FROM DUAL;
+
+   NEXTVAL
+----------
+         7
+
+SQL> SELECT SUIVI_AMITIE_SEQ.NEXTVAL FROM DUAL;
+
+   NEXTVAL
+----------
+         8
+
+SQL> SELECT SUIVI_RESEAU_SEQ.NEXTVAL FROM DUAL;
+
+   NEXTVAL
+----------
+        11
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> REM ------ Validation de declencheur "nouveauSuccesEnCours"
+SQL> 
+SQL> SELECT * FROM SUCCES_CALCULE;
+
+  IDSUCCES MAXIMUMREQUIS
+---------- -------------
+         8            10
+         9             5
+
+SQL> 
+SQL> INSERT INTO SUCCES_REALISE (IdContenu, NoJoueur, IdSucces)
+  2  VALUES (1, 1, 8);
+
+1 ligne inséré.
+
+SQL> INSERT INTO SUCCES_EN_COURS (IdContenu, NoJoueur, IdSucces, Compteur)
+  2  VALUES (1, 1, 8, 0);
+
+Erreur commençant à la ligne: 24 Fichier @ file:/C:/Users/pinot/BD_JEUX/validation/validation_declencheurs.sql
+Dans la commande -
+INSERT INTO SUCCES_EN_COURS (IdContenu, NoJoueur, IdSucces, Compteur)
+VALUES (1, 1, 8, 0)
+Erreur à la ligne de commande: 24 Colonne: 13 Fichier @ file:/C:/Users/pinot/BD_JEUX/validation/validation_declencheurs.sql
+Rapport d'erreur -
+Erreur SQL : ORA-04098: Déclencheur  'ORA8TRD157_44.NOUVEAUSUCCESENCOURS_TRG' non valide. Echec de la revalidation
+04098. 00000 -  "trigger '%s.%s' is invalid and failed re-validation"
+*Cause:    A trigger was attempted to be retrieved for execution and was
+           found to be invalid.  This also means that compilation/authorization
+           failed for the trigger.
+*Action:   Options are to resolve the compilation/authorization errors,
+           disable the trigger, or drop the trigger.
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> REM ------ Validation de declencheur "genre"
+SQL> 
+SQL> SELECT IdJeu, CodeGenre FROM JEU;
+
+     IDJEU COD
+---------- ---
+         1 ACT
+         2 HOR
+         3 HOR
+
+SQL> 
+SQL> SELECT * FROM SOUS_GENRE_JEU
+  2  WHERE IdJeu = 1;
+
+COD      IDJEU
+--- ----------
+AVT          1
+
+SQL> 
+SQL> -- TEST #1 : UPDATE DANS CHANGER LE GENRE
+SQL> UPDATE JEU
+  2  SET CodeGenre = 'ACT'
+  3  WHERE IdJeu = 1;
+
+1 ligne mis à jour.
+
+SQL> 
+SQL> SELECT * FROM SOUS_GENRE_JEU
+  2  WHERE IdJeu = 1;
+
+COD      IDJEU
+--- ----------
+AVT          1
+
+SQL> 
+SQL> -- TEST #2 : UPDATE AVEC MODIFICATION DE GENRE
+SQL> 
+SQL> UPDATE JEU
+  2  SET CodeGenre = 'HOR'
+  3  WHERE IdJeu = 1;
+
+1 ligne mis à jour.
+
+SQL> 
+SQL> SELECT * FROM SOUS_GENRE_JEU
+  2  WHERE IdJeu = 1;
+aucune ligne sélectionnée
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> REM ------ Validation de declencheur "suiviReseau"
+SQL> 
+SQL> INSERT INTO RESEAU (Code, Nom, Description)
+  2  VALUES ('TEST3', 'TEST DE SUIVI', 'SUIVI DE CREATION DU RESEAU');
+
+1 ligne inséré.
+
+SQL> 
+SQL> UPDATE RESEAU SET ACTIF = '1' WHERE Code = 'TEST3';
+
+1 ligne mis à jour.
+
+SQL> UPDATE RESEAU SET ACTIF = '0' WHERE Code = 'TEST3';
+
+1 ligne mis à jour.
+
+SQL> 
+SQL> SELECT * FROM SUIVI_RESEAU
+  2  WHERE CodeReseau = 'TEST3';
+
+   IDSUIVI MOMENT                      CODERE DATESUIVI  ACT   NOJOUEUR
+---------- --------------------------- ------ ---------- --- ----------
+        12 11/11/19 02:44:42,556806000 TEST3  2019/11/11 CRE           
+        13 11/11/19 02:44:42,616817000 TEST3  2019/11/11 ACT           
+        14 11/11/19 02:44:42,672718000 TEST3  2019/11/11 DES           
+
+SQL> 
+SQL> DELETE FROM SUIVI_RESEAU
+  2  WHERE CodeReseau = 'TEST3';
+
+3 lignes supprimé.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> REM ------ Validation de declencheur "suiviAbonnementReseau"
+SQL> 
+SQL> INSERT INTO RESEAU (Code, Nom, Description)
+  2  	VALUES ('TEST02', 'TEST', 'TEST');
+
+1 ligne inséré.
+
+SQL> 
+SQL> INSERT INTO ABONNEMENT_RESEAU (CodeReseau, NoJoueur)
+  2  VALUES ('TEST02', 1);
+
+1 ligne inséré.
+
+SQL> 
+SQL> DELETE FROM ABONNEMENT_RESEAU
+  2  WHERE CodeReseau = 'TEST02';
+
+1 ligne supprimé.
+
+SQL> 
+SQL> SELECT * FROM SUIVI_RESEAU
+  2  WHERE CodeReseau = 'TEST02';
+
+   IDSUIVI MOMENT                      CODERE DATESUIVI  ACT   NOJOUEUR
+---------- --------------------------- ------ ---------- --- ----------
+        15 11/11/19 02:44:42,888849000 TEST02 2019/11/11 CRE           
+        16 11/11/19 02:44:42,946687000 TEST02 2019/11/11 ABO          1
+        17 11/11/19 02:44:43,004122000 TEST02 2019/11/11 DSA          1
+
+SQL> 
+SQL> DELETE FROM SUIVI_RESEAU
+  2  WHERE CodeReseau = 'TEST02';
+
+3 lignes supprimé.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> REM ------ Validation de declencheur "suiviAmi"
+SQL> 
+SQL> INSERT INTO AMI(noJoueurInvitant, NoJoueurInvite, DateDebut, CodeStatut)
+  2  VALUES (1, 4, To_DATE(sysdate), 'NOU');
+
+1 ligne inséré.
+
+SQL> 
+SQL> UPDATE AMI
+  2  SET CodeStatut = 'REL'
+  3  WHERE nojoueurinvitant = 1 AND NoJoueurInvite = 4;
+
+1 ligne mis à jour.
+
+SQL> 
+SQL> UPDATE AMI
+  2  SET CodeStatut = 'FIN'
+  3  WHERE nojoueurinvitant = 1 AND NoJoueurInvite = 4;
+
+1 ligne mis à jour.
+
+SQL> 
+SQL> SELECT * FROM SUIVI_AMITIE
+  2  WHERE nojoueurinvitant = 1 AND NoJoueurInvite = 4;
+
+   IDSUIVI MOMENT                      NOJOUEURINVITANT NOJOUEURINVITE DATESUIVI  COD
+---------- --------------------------- ---------------- -------------- ---------- ---
+         9 11/11/19 02:44:43,214957000                1              4 2019/11/11 NOU
+        10 11/11/19 02:44:43,276533000                1              4 2019/11/11 REL
+        11 11/11/19 02:44:43,332890000                1              4 2019/11/11 FIN
+
+SQL> 
+SQL> DELETE FROM SUIVI_AMITIE
+  2  WHERE nojoueurinvitant = 1 AND NoJoueurInvite = 4;
+
+3 lignes supprimé.
+
+SQL> @validation/validation_procedures.sql
+SQL> REM VALIDATION DES PROCEDURES
+SQL> 
+SQL> @valider_procedure_ajoutForfait.sql
+SQL> REM VALIDATION DE LA PROCEDURE ajoutForfait
+SQL> 
+SQL> SET SERVEROUTPUT ON
+SQL> 
+SQL> -- Initialisation
+SQL> DELETE FROM PERIODE
+  2  WHERE CodeForfait like 'TEST%';
+
+0 lignes supprimé.
+
+SQL> 
+SQL> DELETE FROM FORFAIT
+  2  WHERE code like 'TEST%';
+
+0 lignes supprimé.
+
+SQL> 
+SQL> DECLARE
+  2      code CHAR(5);
+  3      nom VARCHAR2(100);
+  4      description VARCHAR2(1000);
+  5      prix NUMBER(6,2);
+  6  BEGIN
+  7      -- TEST #1 : Insertion reguliere
+  8  	code := 'TEST1';
+  9      nom := 'SUPER FORFAIT';
+ 10      description := 'Description du SUPER FORFAIT';
+ 11      prix := 100;
+ 12      ajoutForfait(code, nom, description, prix);
+ 13  
+ 14      -- TEST #2 : Test du nom NULL
+ 15  	code := 'TEST2';
+ 16      nom := NULL;
+ 17      description := NULL;
+ 18      prix := 10.99;
+ 19      ajoutForfait(code, nom, description, prix);
+ 20  
+ 21  END; 
+ 22  /
+
+Procédure PL/SQL terminée.
+
+SQL> -- Verification
+SQL> SELECT * FROM FORFAIT
+  2  WHERE Code like 'TEST%';
+
+CODE  NOM                                                                                                  DESCRIPTION                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+----- ---------------------------------------------------------------------------------------------------- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TEST1 SUPER FORFAIT                                                                                        Description du SUPER FORFAIT                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+TEST2 Forfait                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+SQL> 
+SQL> SELECT * FROM PERIODE
+  2  WHERE CodeForfait like 'TEST%';
+
+ IDPERIODE DATEDEBUT  DATEFIN          PRIX CODEF
+---------- ---------- ---------- ---------- -----
+         6 2019/11/11 2020/11/11        100 TEST1
+         7 2019/11/11 2020/11/11      10,99 TEST2
+
+SQL> 
+SQL> -- SUPPRESSION DES TEST
+SQL> DELETE FROM PERIODE
+  2  WHERE CodeForfait like 'TEST%';
+
+2 lignes supprimé.
+
+SQL> DELETE FROM FORFAIT
+  2  WHERE code like 'TEST%';
+
+2 lignes supprimé.
+
+SQL> @valider_procedure_prolongationForfait.sql
+SQL> REM VALIDATION DE LA PROCEDURE prolongationForfait
+SQL> 
+SQL> SET SERVEROUTPUT ON
+SQL> 
+SQL> -- Initialisation
+SQL> SELECT *
+  2  FROM periode_forfait_joueur pfj, periode p
+  3  WHERE pfj.idPeriode = p.idPeriode
+  4  AND pfj.dateachat >= add_months(sysdate,-12);
+
+ IDPERIODE   NOJOUEUR DATEACHAT   IDPERIODE DATEDEBUT  DATEFIN          PRIX CODEF
+---------- ---------- ---------- ---------- ---------- ---------- ---------- -----
+         1          1 2019/06/06          1 2019/01/11 2019/12/31         80 GOLD1
+         1          3 2019/10/06          1 2019/01/11 2019/12/31         80 GOLD1
+         2          1 2019/04/04          2 2018/01/11 2018/12/31         90 GOLD1
+         3          1 2019/05/05          3 2019/06/11 2019/10/31         50 PASS1
+
+SQL> 
+SQL> DECLARE
+  2      code CHAR(5);
+  3      nombreJoueursTouches INTEGER;
+  4  BEGIN
+  5      -- TEST #1
+  6  	code := 'GOLD1';
+  7      prolongationForfait(code, nombreJoueursTouches);
+  8      dbms_output.put_line('nombreJoueursTouches : ' || nombreJoueursTouches);
+  9  
+ 10      -- TEST #2
+ 11  	code := 'TEST1';
+ 12      prolongationForfait(code, nombreJoueursTouches);
+ 13      dbms_output.put_line('nombreJoueursTouches : ' || nombreJoueursTouches);
+ 14  
+ 15  END; 
+ 16  /
+nombreJoueursTouches : 3
+nombreJoueursTouches : 0
+
+
+Procédure PL/SQL terminée.
+
+SQL> 
+SQL> -- Verification
+SQL> REM La liste des forfaits de joueurs valides
+SQL> SELECT * 
+  2  FROM periode_forfait_joueur pfj, periode p
+  3  WHERE pfj.idPeriode = p.idPeriode
+  4  AND pfj.dateachat >= add_months(sysdate,-12);
+
+ IDPERIODE   NOJOUEUR DATEACHAT   IDPERIODE DATEDEBUT  DATEFIN          PRIX CODEF
+---------- ---------- ---------- ---------- ---------- ---------- ---------- -----
+         1          1 2019/08/06          1 2019/01/11 2019/12/31         80 GOLD1
+         1          3 2019/12/06          1 2019/01/11 2019/12/31         80 GOLD1
+         2          1 2019/06/04          2 2018/01/11 2018/12/31         90 GOLD1
+         3          1 2019/05/05          3 2019/06/11 2019/10/31         50 PASS1
+
+SQL> @valider_procedure_ajusterPromotion.sql
+SQL> REM VALIDATION DE LA PROCEDURE ajusterPromotion
+SQL> 
+SQL> SET SERVEROUTPUT ON
+SQL> 
+SQL> SELECT * FROM PERIODE;
+
+ IDPERIODE DATEDEBUT  DATEFIN          PRIX CODEF
+---------- ---------- ---------- ---------- -----
+         1 2019/01/11 2019/12/31         80 GOLD1
+         2 2018/01/11 2018/12/31         90 GOLD1
+         3 2019/06/11 2019/10/31         50 PASS1
+         4 2000/01/01 2030/12/31          0 STAND
+
+SQL> 
+SQL> DECLARE
+  2      codeForfait	CHAR(5);
+  3  	prix		NUMBER (6,2);
+  4  BEGIN
+  5      -- TEST
+  6      ajusterPromotion(codeForfait, prix);
+  7      dbms_output.put_line('codeForfait : ' || codeForfait);
+  8      dbms_output.put_line('Prix : ' || prix);
+  9  END; 
+ 10  /
+codeForfait : GOLD1
+Prix : 88
+
+
+Procédure PL/SQL terminée.
+
+SQL> 
+SQL> SELECT * FROM PERIODE;
+
+ IDPERIODE DATEDEBUT  DATEFIN          PRIX CODEF
+---------- ---------- ---------- ---------- -----
+         1 2019/01/11 2019/12/31         88 GOLD1
+         2 2018/01/11 2018/12/31         90 GOLD1
+         3 2019/06/11 2019/10/31         50 PASS1
+         4 2000/01/01 2030/12/31          0 STAND
+
+SQL> @valider_procedure_suppressionJeu.sql
+SQL> REM VALIDATION DE LA PROCEDURE suppressionJeu
+SQL> 
+SQL> SET SERVEROUTPUT ON
+SQL> 
+SQL> -- Initialisation
+SQL> SELECT * FROM JEU;
+
+     IDJEU NOM                                                                                                  DESCRIPTION                                                                                                                                                                                                                                                      C COD
+---------- ---------------------------------------------------------------------------------------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- - ---
+         1 TOMB RAIDER                                                                                          Les aventures de Lara Croft                                                                                                                                                                                                                                      T HOR
+         2 Dying Light                                                                                          Survivre dans un monde infesté de zombie. Bonne nuit!                                                                                                                                                                                                            M HOR
+         3 CANDY CRUSH                                                                                          Le super jeu                                                                                                                                                                                                                                                     T HOR
+
+SQL> SELECT * FROM CONTENU;
+
+ IDCONTENU NOM                                                                                                  DESCRIPTION                                                                                                                                                                                                                                                      DATESORTIE T      IDJEU
+---------- ---------------------------------------------------------------------------------------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------- - ----------
+         1 Les quêtes principales                                                                               Les aventures de Lara Croft en Amazonie                                                                                                                                                                                                                          2018/02/03 J          1
+         2 La quête secondaire du dragon                                                                        Les aventures de Lara Croft en Chine                                                                                                                                                                                                                             2018/06/23 D          1
+         3 La quête secondaire de l'aigle                                                                       Les aventures de Lara Croft dans les montagnes                                                                                                                                                                                                                   2018/11/11 D          1
+         4 Ensemble d'exploration                                                                               Équipements supplémentaires pour l'aventure                                                                                                                                                                                                                      2018/12/01 O          1
+         5 Chicago                                                                                              La ville infestée de Chicago                                                                                                                                                                                                                                     2018/09/09 J          2
+         6 Niveau1                                                                                              Les 10 premiers niveaux                                                                                                                                                                                                                                          2019/01/24 J          3
+
+6 lignes sélectionnées. 
+
+SQL> SELECT * FROM SUCCES;
+
+  IDSUCCES TITRE                                              DESCRIPTION                                                                                                                                                                                                                                                      IMAGE                                                                                VALEUR  IDCONTENU
+---------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------- ---------- ----------
+         1 Survivre                                           Vous avez réussi à traverser la foret amazonienne                                                                                                                                                                                                                                                                                                         50          1
+         2 Délivrance                                         Vous avez réussi à sauver Kevin                                                                                                                                                                                                                                                                                                                           10          1
+         3 Tenace                                             Rependre le combat après une raclée                                                                                                                                                                                                                                                                                                                       10          1
+         4 Rusé                                               Résoudre l'énigme du dragon                                                                                                                                                                                                                                                                                                                               20          2
+         5 Agile                                              Réussir un vol plané des hautes falaises                                                                                                                                                                                                                                                                                                                  20          3
+         6 Survivant                                          Survivre la première nuit dans la ville                                                                                                                                                                                                                                                                                                                   50          5
+         7 Mission_1                                          Vaincre le gros méchant zombie à la fin de la mission                                                                                                                                                                                                                                                                                                     10          5
+         8 Herboriste                                         Recuperer des plantes médécinales                                                                                                                                                                                                                                                                                                                          5          5
+         9 Super bonbonnier                                   Reussir 5X un tableau en 10 secondes                                                                                                                                                                                                                                                                                                                       5          6
+
+9 lignes sélectionnées. 
+
+SQL> SELECT * FROM SUCCES_CALCULE;
+
+  IDSUCCES MAXIMUMREQUIS
+---------- -------------
+         8            10
+         9             5
+
+SQL> 
+SQL> DECLARE
+  2      resultat INTEGER;
+  3      nomJeu VARCHAR2(100);
+  4  BEGIN
+  5      -- TEST #1 : Un jeu que personne ne possede
+  6  	nomJeu := 'CANDY CRUSH';
+  7      suppressionJeu(resultat, nomJeu);
+  8      dbms_output.put_line('resultat : ' || resultat);
+  9  
+ 10      -- TEST #2 : un jeu possede (ROLLBACK)
+ 11  	nomJeu := 'TOMB RAIDER';
+ 12      suppressionJeu(resultat, nomJeu);
+ 13      dbms_output.put_line('resultat : ' || resultat);
+ 14  
+ 15  END; 
+ 16  /
+resultat : 0
+resultat : 3
+
+
+Procédure PL/SQL terminée.
+
+SQL> 
+SQL> SELECT * FROM JEU;
+
+     IDJEU NOM                                                                                                  DESCRIPTION                                                                                                                                                                                                                                                      C COD
+---------- ---------------------------------------------------------------------------------------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- - ---
+         1 TOMB RAIDER                                                                                          Les aventures de Lara Croft                                                                                                                                                                                                                                      T HOR
+         2 Dying Light                                                                                          Survivre dans un monde infesté de zombie. Bonne nuit!                                                                                                                                                                                                            M HOR
+
+SQL> SELECT * FROM CONTENU;
+
+ IDCONTENU NOM                                                                                                  DESCRIPTION                                                                                                                                                                                                                                                      DATESORTIE T      IDJEU
+---------- ---------------------------------------------------------------------------------------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------- - ----------
+         1 Les quêtes principales                                                                               Les aventures de Lara Croft en Amazonie                                                                                                                                                                                                                          2018/02/03 J          1
+         2 La quête secondaire du dragon                                                                        Les aventures de Lara Croft en Chine                                                                                                                                                                                                                             2018/06/23 D          1
+         3 La quête secondaire de l'aigle                                                                       Les aventures de Lara Croft dans les montagnes                                                                                                                                                                                                                   2018/11/11 D          1
+         4 Ensemble d'exploration                                                                               Équipements supplémentaires pour l'aventure                                                                                                                                                                                                                      2018/12/01 O          1
+         5 Chicago                                                                                              La ville infestée de Chicago                                                                                                                                                                                                                                     2018/09/09 J          2
+
+SQL> SELECT * FROM SUCCES;
+
+  IDSUCCES TITRE                                              DESCRIPTION                                                                                                                                                                                                                                                      IMAGE                                                                                VALEUR  IDCONTENU
+---------- -------------------------------------------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -------------------------------------------------------------------------------- ---------- ----------
+         1 Survivre                                           Vous avez réussi à traverser la foret amazonienne                                                                                                                                                                                                                                                                                                         50          1
+         2 Délivrance                                         Vous avez réussi à sauver Kevin                                                                                                                                                                                                                                                                                                                           10          1
+         3 Tenace                                             Rependre le combat après une raclée                                                                                                                                                                                                                                                                                                                       10          1
+         4 Rusé                                               Résoudre l'énigme du dragon                                                                                                                                                                                                                                                                                                                               20          2
+         5 Agile                                              Réussir un vol plané des hautes falaises                                                                                                                                                                                                                                                                                                                  20          3
+         6 Survivant                                          Survivre la première nuit dans la ville                                                                                                                                                                                                                                                                                                                   50          5
+         7 Mission_1                                          Vaincre le gros méchant zombie à la fin de la mission                                                                                                                                                                                                                                                                                                     10          5
+         8 Herboriste                                         Recuperer des plantes médécinales                                                                                                                                                                                                                                                                                                                          5          5
+
+8 lignes sélectionnées. 
+
+SQL> SELECT * FROM SUCCES_CALCULE;
+
+  IDSUCCES MAXIMUMREQUIS
+---------- -------------
+         8            10
+
+SQL> 
+SQL> spool off

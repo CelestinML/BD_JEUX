@@ -5,6 +5,7 @@ CREATE OR REPLACE PROCEDURE suppressionJeu(etat_sortie OUT INT, nom_du_jeu IN JE
 
 BEGIN
     
+    etat_sortie := 0;
     SELECT COUNT(*)
     INTO nb_jeux
     FROM JEU

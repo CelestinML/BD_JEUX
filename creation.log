@@ -889,7 +889,7 @@ SQL> REM CREATION DES TRIGGERS
 SQL> 
 SQL> @declencheurs/sequences.sql
 
-Erreur commençant à la ligne: 111 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
+Erreur commençant à la ligne: 111 Fichier @ C:\Users\pinot\BD_JEUX\scripts\creation_declencheurs.sql
 Dans la commande -
 @declencheurs/sequences.sql
 Rapport d'erreur -
@@ -897,30 +897,38 @@ SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/sequences.sql"
 SQL> 
 SQL> @declencheurs/nouveauSuccesEnCours.sql 
 SQL> CREATE OR REPLACE TRIGGER NOUVEAUSUCCESENCOURS_TRG 
-  2  BEFORE INSERT ON SUCCES_EN_COURS 
-  3  FOR EACH ROW
-  4  BEGIN
-  5      --On verifie si le succes en court d'insertion a ete realise par ce joueur dans ce jeu
-  6      IF (:NEW.IDSUCCES IN (SELECT IDSUCCES FROM SUCCES_REALISE WHERE NOJOUEUR = :NEW.NOJOUEUR AND IDCONTENU = :NEW.IDCONTENU)) THEN
-  7          raise_application_error(-1000, 'Succes deja realise.');
-  8      END IF;
-  9      --Si le succès n'est pas dans les succes deja realises par ce joueur dans ce jeu, rien ne se passe et l'insertion se termine correctement
- 10  END;
+  2      BEFORE INSERT 
+  3      ON SUCCES_EN_COURS 
+  4      FOR EACH ROW
+  5  BEGIN
+  6      --On verifie si le succes en court d'insertion a ete realise par ce joueur dans ce jeu
+  7     IF (:NEW.IDSUCCES IN (SELECT IDSUCCES FROM SUCCES_REALISE WHERE NOJOUEUR = :NEW.NOJOUEUR AND IDCONTENU = :NEW.IDCONTENU)) THEN
+  8      raise_application_error(-20000, 'Succes deja realise.');
+  9     END IF;
+ 10      --Si le succès n'est pas dans les succes deja realises par ce joueur dans ce jeu, rien ne se passe et l'insertion se termine correctement
+ 11  END;
 
 Elément Trigger NOUVEAUSUCCESENCOURS_TRG compilé
 
 LINE/COL  ERROR
 --------- -------------------------------------------------------------
-3/5       PL/SQL: Statement ignored
-3/26      PLS-00405: subquery not allowed in this context
+3/4       PL/SQL: Statement ignored
+3/25      PLS-00405: subquery not allowed in this context
 Erreurs : consulter le journal du compilateur
 SQL> @declencheurs/genre.sql 
+SQL> CREATE OR REPLACE TRIGGER Genre_TRG
+  2      AFTER UPDATE
+  3      ON JEU
+  4      FOR EACH ROW
+  5  BEGIN
+  6      if :OLD.CODEGENRE <> :NEW.CODEGENRE then
+  7      delete from sous_genre_jeu where idjeu = :NEW.idjeu;
+  8      end if;
+  9  
+ 10  END;
 
-Erreur commençant à la ligne: 114 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
-Dans la commande -
-@declencheurs/genre.sql
-Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "declencheurs/genre.sql"
+Elément Trigger GENRE_TRG compilé
+
 SQL> @declencheurs/suiviReseau.sql 
 SQL> CREATE OR REPLACE TRIGGER Suivi_Reseau_TRG
   2      AFTER INSERT OR UPDATE
@@ -1015,12 +1023,68 @@ SQL> CREATE OR REPLACE PROCEDURE PROLONGATIONFORFAIT(CODE IN CHAR, NBTOUCHES OUT
 Elément Procedure PROLONGATIONFORFAIT compilé
 
 SQL> @procedures/ajusterPromotion.sql
+SQL> create or replace PROCEDURE AJUSTERPROMOTION(code OUT char, nouveau_prix OUT INT) AS
+  2  
+  3      reseau_le_pop char(6);
+  4      periode_plus_utilise char(5);
+  5      prix_max number(6,2);
+  6      prix_pop number(6,2);
+  7  
+  8  
+  9  
+ 10  BEGIN
+ 11  
+ 12  
+ 13  
+ 14     select codereseau 
+ 15     into reseau_le_pop 
+ 16     from(
+ 17      select codereseau 
+ 18      from 
+ 19      (
+ 20          SELECT codereseau, count(*)nb 
+ 21          FROM abonnement_reseau natural join joueur inner join reseau on abonnement_reseau.codereseau = reseau.code 
+ 22          where reseau.actif = 1 
+ 23          group by codereseau
+ 24      ) 
+ 25      ORDER BY nb desc) 
+ 26     where rownum = 1;
+ 27  
+ 28  
+ 29  
+ 30     select idPeriode 
+ 31     into periode_plus_utilise
+ 32     from (
+ 33      select idPeriode
+ 34      from (
+ 35          select idPeriode,count (*)  nb 
+ 36          from periode natural join periode_forfait_joueur natural join abonnement_reseau 
+ 37          where codereseau = reseau_le_pop group by idPeriode
+ 38          ) 
+ 39      order by nb desc
+ 40      )
+ 41  where ROWNUM = 1;
+ 42  
+ 43  
+ 44  --On cherche le prix max
+ 45  select prix into prix_max from (select prix from periode  order by prix desc) where ROWNUM =1; 
+ 46  
+ 47  -- On cherche le prix de la periode concerné
+ 48  select prix into prix_pop from periode where idPeriode = periode_plus_utilise;
+ 49  
+ 50  if prix_max > prix_pop then
+ 51          UPDATE PERIODE 
+ 52          SET PRIX = PRIX + 0.1*PRIX
+ 53          WHERE idPeriode = periode_plus_utilise;
+ 54  end if;
+ 55  
+ 56  select codeForfait,prix into code, nouveau_prix from periode where idPeriode = periode_plus_utilise;
+ 57  
+ 58  
+ 59  END AJUSTERPROMOTION;
 
-Erreur commençant à la ligne: 5 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_procedures.sql
-Dans la commande -
-@procedures/ajusterPromotion.sql
-Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "procedures/ajusterPromotion.sql"
+Elément Procedure AJUSTERPROMOTION compilé
+
 SQL> @procedures/suppressionJeu.sql
 SQL> CREATE OR REPLACE PROCEDURE suppressionJeu(etat_sortie OUT INT, nom_du_jeu IN JEU.NOM%TYPE) AS 
   2  
@@ -1029,50 +1093,51 @@ SQL> CREATE OR REPLACE PROCEDURE suppressionJeu(etat_sortie OUT INT, nom_du_jeu 
   5  
   6  BEGIN
   7  
-  8      SELECT COUNT(*)
-  9      INTO nb_jeux
- 10      FROM JEU
- 11      WHERE NOM = nom_du_jeu;
- 12  
- 13      IF nb_jeux = 0 THEN
- 14          etat_sortie := 1;
- 15      ELSIF nb_jeux > 1 THEN
- 16          etat_sortie := 2;
- 17      ELSE
- 18  
- 19          SELECT IDJEU
- 20          INTO id_jeu
- 21          FROM JEU
- 22          WHERE NOM = nom_du_jeu;
- 23  
- 24          COMMIT;
- 25          SET TRANSACTION NAME 'supressions';
- 26              DELETE
- 27              FROM SUCCES_EN_COURS
- 28              WHERE IDSUCCES IN (SELECT IDSUCCES FROM SUCCES WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu));
- 29              DELETE
- 30              FROM SUCCES_CALCULE
- 31              WHERE IDSUCCES IN (SELECT IDSUCCES FROM SUCCES WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu));
- 32              DELETE
- 33              FROM SUCCES_REALISE
- 34              WHERE IDSUCCES IN (SELECT IDSUCCES FROM SUCCES WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu));
- 35              DELETE
- 36              FROM SUCCES
- 37              WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu);
- 38              DELETE
- 39              FROM CONTENU
- 40              WHERE IDJEU = id_jeu;
- 41              DELETE
- 42              FROM JEU
- 43              WHERE NOM = nom_du_jeu;
- 44          COMMIT;
- 45  
- 46      END IF;
- 47  EXCEPTION
- 48      WHEN OTHERS THEN
- 49          etat_sortie := 3;
- 50          ROLLBACK;
- 51  END suppressionJeu;
+  8      etat_sortie := 0;
+  9      SELECT COUNT(*)
+ 10      INTO nb_jeux
+ 11      FROM JEU
+ 12      WHERE NOM = nom_du_jeu;
+ 13  
+ 14      IF nb_jeux = 0 THEN
+ 15          etat_sortie := 1;
+ 16      ELSIF nb_jeux > 1 THEN
+ 17          etat_sortie := 2;
+ 18      ELSE
+ 19  
+ 20          SELECT IDJEU
+ 21          INTO id_jeu
+ 22          FROM JEU
+ 23          WHERE NOM = nom_du_jeu;
+ 24  
+ 25          COMMIT;
+ 26          SET TRANSACTION NAME 'supressions';
+ 27              DELETE
+ 28              FROM SUCCES_EN_COURS
+ 29              WHERE IDSUCCES IN (SELECT IDSUCCES FROM SUCCES WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu));
+ 30              DELETE
+ 31              FROM SUCCES_CALCULE
+ 32              WHERE IDSUCCES IN (SELECT IDSUCCES FROM SUCCES WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu));
+ 33              DELETE
+ 34              FROM SUCCES_REALISE
+ 35              WHERE IDSUCCES IN (SELECT IDSUCCES FROM SUCCES WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu));
+ 36              DELETE
+ 37              FROM SUCCES
+ 38              WHERE IDCONTENU IN (SELECT IDCONTENU FROM CONTENU WHERE IDJEU = id_jeu);
+ 39              DELETE
+ 40              FROM CONTENU
+ 41              WHERE IDJEU = id_jeu;
+ 42              DELETE
+ 43              FROM JEU
+ 44              WHERE NOM = nom_du_jeu;
+ 45          COMMIT;
+ 46  
+ 47      END IF;
+ 48  EXCEPTION
+ 49      WHEN OTHERS THEN
+ 50          etat_sortie := 3;
+ 51          ROLLBACK;
+ 52  END suppressionJeu;
 
 Elément Procedure SUPPRESSIONJEU compilé
 
@@ -1133,48 +1198,29 @@ Elément Function VALIDERGENRE compilé
 SQL> @fonctions/joueurLePlusPopulaire.sql
 SQL> CREATE OR REPLACE FUNCTION joueurLePlusPopulaire RETURN VARCHAR2 AS
   2  
-  3  	CURSOR joueurs_actifs IS
-  4  	SELECT NOJOUEUR
-  5  	FROM JOUEUR
-  6  	WHERE ACTIF = '1';
+  3  	joueur_plus_populaire JOUEUR.SURNOM%TYPE;
+  4  
+  5  
+  6  BEGIN
   7  
-  8  	no_joueur_actuel JOUEUR.NOJOUEUR%TYPE;
-  9  	joueur_plus_populaire JOUEUR.SURNOM%TYPE;
- 10  	nb_max_amis INT;
- 11  	nb_actuel_amis INT;
- 12  
- 13  BEGIN
- 14  
- 15  	nb_max_amis := 0;
- 16      OPEN joueurs_actifs;
- 17  	FOR no_joueur_actuel IN joueurs_actifs LOOP
- 18  		SELECT COUNT(*)
- 19  		INTO nb_actuel_amis
- 20  		FROM AMI
- 21  		WHERE (NOJOUEURINVITANT = no_joueur_actuel)
- 22          OR (NOJOUEURINVITE = no_joueur_actuel);
- 23  		IF nb_actuel_amis > nb_max_amis THEN
- 24  			nb_max_amis := nb_actuel_amis;
- 25  			SELECT SURNOM
- 26  			INTO joueur_plus_populaire
- 27  			FROM JOUEUR
- 28  			WHERE (NOJOUEUR = no_joueur_actuel);
- 29  		END IF;
- 30  	END LOOP;
- 31      CLOSE joueurs_actifs;
- 32  
- 33  	RETURN joueur_plus_populaire;
- 34  
- 35  END joueurLePlusPopulaire;
+  8      select surnom 
+  9      into joueur_plus_populaire
+ 10      from(
+ 11          select surnom
+ 12          from(
+ 13              select joueur.surnom, count(*)nb 
+ 14              from joueur natural join ami where actif = 1 and prenom is not null and  nom is not null and (joueur.nojoueur = ami.nojoueurinvitant or joueur.nojoueur = ami.nojoueurinvite) 
+ 15              group by joueur.surnom
+ 16              )
+ 17          order by nb desc)
+ 18      where rownum = 1;
+ 19  
+ 20  	RETURN joueur_plus_populaire;
+ 21  
+ 22  END joueurLePlusPopulaire;
 
 Elément Function JOUEURLEPLUSPOPULAIRE compilé
 
-LINE/COL  ERROR
---------- -------------------------------------------------------------
-21/29     PLS-00382: expression is of wrong type
-22/30     PLS-00382: expression is of wrong type
-28/22     PLS-00382: expression is of wrong type
-Erreurs : consulter le journal du compilateur
 SQL> @fonctions/jeuLePlusPopulaire.sql
 SQL> CREATE OR REPLACE FUNCTION jeuLePlusPopulaire(code_esrb IN CHAR) RETURN VARCHAR2 AS
   2  
@@ -1209,26 +1255,24 @@ SQL> REM CREATION DES VUES
 SQL> 
 SQL> @vues/mesSucces.sql
 
-Erreur commençant à la ligne: 3 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_vues.sql
+Erreur commençant à la ligne: 3 Fichier @ C:\Users\pinot\BD_JEUX\scripts\creation_vues.sql
 Dans la commande -
 @vues/mesSucces.sql
 Rapport d'erreur -
 SP2-0310 : impossible d'ouvrir le fichier : "vues/mesSucces.sql"
 SQL> @vues/suivi.sql
 SQL> CREATE VIEW suiviReseau AS
-  2     SELECT S.MOMENT, S.ACTION, S.CODERESEAU, R.NOM FROM RESEAU R INNER JOIN SUIVI_RESEAU S
-  3     ON R.CODE = S.CODERESEAU
-  4     WHERE S.NOJOUEUR = NULL
-  5     ORDER BY S.MOMENT ASC;
+  2     SELECT MOMENT, ACTION, CODERESEAU, NOM FROM RESEAU  natural JOIN SUIVI_RESEAU 
+  3     WHERE NOJOUEUR IS NULL
+  4     ORDER BY MOMENT ASC;
 
 View SUIVIRESEAU créé(e).
 
 SQL> 
 SQL> CREATE VIEW suiviReseauJoueur AS
-  2     SELECT S.MOMENT, S.ACTION, S.CODERESEAU, J.SURNOM FROM JOUEUR J INNER JOIN SUIVI_RESEAU S
-  3     ON J.NOJOUEUR = S.NOJOUEUR
-  4     WHERE S.NOJOUEUR != NULL
-  5     ORDER BY S.MOMENT ASC;
+  2     SELECT MOMENT, ACTION, CODERESEAU, SURNOM FROM JOUEUR  NATURAL JOIN SUIVI_RESEAU 
+  3     WHERE NOJOUEUR IS NOT NULL
+  4     ORDER BY MOMENT ASC;
 
 View SUIVIRESEAUJOUEUR créé(e).
 
@@ -1237,7 +1281,7 @@ SQL> CREATE VIEW suiviAmitieInvitation AS
   2     SELECT S.MOMENT, J.SURNOM, J.NOJOUEUR, S.NOJOUEURINVITE, S.DATESUIVI, S.CODESTATUT FROM JOUEUR J INNER JOIN SUIVI_AMITIE S
   3     ON J.NOJOUEUR = S.NOJOUEURINVITANT;
 
-Erreur commençant à la ligne: 13 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\vues\suivi.sql
+Erreur commençant à la ligne: 11 Fichier @ C:\Users\pinot\BD_JEUX\scripts\vues\suivi.sql
 Dans la commande -
 CREATE VIEW suiviAmitieInvitation AS
    SELECT S.MOMENT, J.SURNOM, J.NOJOUEUR, S.NOJOUEURINVITE, S.DATESUIVI, S.CODESTATUT FROM JOUEUR J INNER JOIN SUIVI_AMITIE S
@@ -1538,13 +1582,13 @@ SQL>
 SQL> INSERT INTO SUCCES_EN_COURS (IdContenu, NoJoueur, IdSucces, Compteur)
   2  	VALUES (5, 2, 8, 7);
 
-Erreur commençant à la ligne: 123 Fichier @ file:/C:/Users/celes/Desktop/UQAC/Oracle/BD_JEUX/creation_donnees.sql
+Erreur commençant à la ligne: 123 Fichier @ file:/C:/Users/pinot/BD_JEUX/creation_donnees.sql
 Dans la commande -
 INSERT INTO SUCCES_EN_COURS (IdContenu, NoJoueur, IdSucces, Compteur)
 	VALUES (5, 2, 8, 7)
-Erreur à la ligne de commande: 123 Colonne: 13 Fichier @ file:/C:/Users/celes/Desktop/UQAC/Oracle/BD_JEUX/creation_donnees.sql
+Erreur à la ligne de commande: 123 Colonne: 13 Fichier @ file:/C:/Users/pinot/BD_JEUX/creation_donnees.sql
 Rapport d'erreur -
-Erreur SQL : ORA-04098: Déclencheur  'ORA8TRD157_42.NOUVEAUSUCCESENCOURS_TRG' non valide. Echec de la revalidation
+Erreur SQL : ORA-04098: Déclencheur  'ORA8TRD157_44.NOUVEAUSUCCESENCOURS_TRG' non valide. Echec de la revalidation
 04098. 00000 -  "trigger '%s.%s' is invalid and failed re-validation"
 *Cause:    A trigger was attempted to be retrieved for execution and was
            found to be invalid.  This also means that compilation/authorization
