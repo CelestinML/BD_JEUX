@@ -889,7 +889,7 @@ SQL> REM CREATION DES TRIGGERS
 SQL> 
 SQL> @declencheurs/sequences.sql
 
-Erreur commençant à la ligne: 111 Fichier @ C:\Users\pinot\BD_JEUX\scripts\creation_declencheurs.sql
+Erreur commençant à la ligne: 111 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\creation_declencheurs.sql
 Dans la commande -
 @declencheurs/sequences.sql
 Rapport d'erreur -
@@ -900,21 +900,20 @@ SQL> CREATE OR REPLACE TRIGGER NOUVEAUSUCCESENCOURS_TRG
   2      BEFORE INSERT 
   3      ON SUCCES_EN_COURS 
   4      FOR EACH ROW
-  5  BEGIN
-  6      --On verifie si le succes en court d'insertion a ete realise par ce joueur dans ce jeu
-  7     IF (:NEW.IDSUCCES IN (SELECT IDSUCCES FROM SUCCES_REALISE WHERE NOJOUEUR = :NEW.NOJOUEUR AND IDCONTENU = :NEW.IDCONTENU)) THEN
-  8      raise_application_error(-20000, 'Succes deja realise.');
-  9     END IF;
- 10      --Si le succès n'est pas dans les succes deja realises par ce joueur dans ce jeu, rien ne se passe et l'insertion se termine correctement
- 11  END;
+  5  DECLARE
+  6      CURSOR succes_realise_par_joueur IS
+  7  	SELECT * FROM SUCCES_REALISE;
+  8  BEGIN
+  9  
+ 10          FOR succes IN succes_realise_par_joueur LOOP
+ 11              IF(succes.idcontenu = :NEW.idcontenu AND succes.nojoueur = :NEW.nojoueur AND succes.IDSUCCES = :NEW.idsucces) THEN
+ 12              raise_application_error(-20000, 'Succes deja realise.');
+ 13              END IF;   
+ 14          END LOOP;
+ 15  END;
 
 Elément Trigger NOUVEAUSUCCESENCOURS_TRG compilé
 
-LINE/COL  ERROR
---------- -------------------------------------------------------------
-3/4       PL/SQL: Statement ignored
-3/25      PLS-00405: subquery not allowed in this context
-Erreurs : consulter le journal du compilateur
 SQL> @declencheurs/genre.sql 
 SQL> CREATE OR REPLACE TRIGGER Genre_TRG
   2      AFTER UPDATE
@@ -1254,12 +1253,13 @@ SQL> @scripts/creation_vues.sql
 SQL> REM CREATION DES VUES
 SQL> 
 SQL> @vues/mesSucces.sql
+SQL> CREATE VIEW MesSucces AS
+  2      select titre, description, valeur, noJoueur from succes natural join succes_realise;
 
-Erreur commençant à la ligne: 3 Fichier @ C:\Users\pinot\BD_JEUX\scripts\creation_vues.sql
-Dans la commande -
-@vues/mesSucces.sql
-Rapport d'erreur -
-SP2-0310 : impossible d'ouvrir le fichier : "vues/mesSucces.sql"
+View MESSUCCES créé(e).
+
+SQL>     select titre, description, valeur, noJoueur from succes natural join succes_calcule natural join  succes_en_cours;
+aucune ligne sélectionnée
 SQL> @vues/suivi.sql
 SQL> CREATE VIEW suiviReseau AS
   2     SELECT MOMENT, ACTION, CODERESEAU, NOM FROM RESEAU  natural JOIN SUIVI_RESEAU 
@@ -1281,7 +1281,7 @@ SQL> CREATE VIEW suiviAmitieInvitation AS
   2     SELECT S.MOMENT, J.SURNOM, J.NOJOUEUR, S.NOJOUEURINVITE, S.DATESUIVI, S.CODESTATUT FROM JOUEUR J INNER JOIN SUIVI_AMITIE S
   3     ON J.NOJOUEUR = S.NOJOUEURINVITANT;
 
-Erreur commençant à la ligne: 11 Fichier @ C:\Users\pinot\BD_JEUX\scripts\vues\suivi.sql
+Erreur commençant à la ligne: 11 Fichier @ C:\Users\celes\Desktop\UQAC\Oracle\BD_JEUX\scripts\vues\suivi.sql
 Dans la commande -
 CREATE VIEW suiviAmitieInvitation AS
    SELECT S.MOMENT, J.SURNOM, J.NOJOUEUR, S.NOJOUEURINVITE, S.DATESUIVI, S.CODESTATUT FROM JOUEUR J INNER JOIN SUIVI_AMITIE S
@@ -1582,19 +1582,8 @@ SQL>
 SQL> INSERT INTO SUCCES_EN_COURS (IdContenu, NoJoueur, IdSucces, Compteur)
   2  	VALUES (5, 2, 8, 7);
 
-Erreur commençant à la ligne: 123 Fichier @ file:/C:/Users/pinot/BD_JEUX/creation_donnees.sql
-Dans la commande -
-INSERT INTO SUCCES_EN_COURS (IdContenu, NoJoueur, IdSucces, Compteur)
-	VALUES (5, 2, 8, 7)
-Erreur à la ligne de commande: 123 Colonne: 13 Fichier @ file:/C:/Users/pinot/BD_JEUX/creation_donnees.sql
-Rapport d'erreur -
-Erreur SQL : ORA-04098: Déclencheur  'ORA8TRD157_44.NOUVEAUSUCCESENCOURS_TRG' non valide. Echec de la revalidation
-04098. 00000 -  "trigger '%s.%s' is invalid and failed re-validation"
-*Cause:    A trigger was attempted to be retrieved for execution and was
-           found to be invalid.  This also means that compilation/authorization
-           failed for the trigger.
-*Action:   Options are to resolve the compilation/authorization errors,
-           disable the trigger, or drop the trigger.
+1 ligne inséré.
+
 SQL> 
 SQL> INSERT INTO FORFAIT (Code, Nom, Description)
   2  	VALUES ('GOLD1', 'XBox Gold' , 'Abonnement pour jouer en ligne et avoir des promotions');
